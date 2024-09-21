@@ -1,4 +1,4 @@
-export type buttonVariant = 'PRIMARY' | 'SECONDARY' | 'WITHICONS'
+export type buttonVariant = 'PRIMARY' | 'SECONDARY' | 'WITHICONS' | 'NO_FILL'
 
 export interface inputProps {
     inputType: string;
