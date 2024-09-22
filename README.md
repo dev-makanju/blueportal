@@ -24,3 +24,13 @@ The typical state management tool is to create store -> create an action -> crea
 
 ### SSG and SSR Implementation
 
+SSR and SSG have their use cases so you don't just use them anyhow, when an update is needed often it's best to adopt SSR which means that everyrequest is looking for new update. pages like dashboard that needs frequent update needs this page - I use this is the product **preview page** Although, content here too can need constant update - assuming a user wants to buy stuff and admin is constantly updating the stock price or programantically update it when someone buy.
+
+It has trade offs, can be slow because of the server rendering.
+
+
+SSG From the name static side generation, it generate static HTML files during build time, pages that actually do not need any update like the product creation page will adopt SSG - it's better suite for them.
+
+
+**MY OPINION**: Both can be used hands in hands when building a complex application, you can't choose one over another because they serve different purposes on App creation. The most important thing is making sure that any page that work as a server component should not be using an interaction states like use state or click event - put them in a separate component and apply 'use client' appropriately indicating that it's a client component.
+

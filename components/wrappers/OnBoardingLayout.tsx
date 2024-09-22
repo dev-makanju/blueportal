@@ -45,12 +45,16 @@ export default function OnBoardingLayout({
         </div>
       </header>
       {children}
-      <div className="absolute bottom-0 border right-0 left-0">
-        <Button
-          variant="PRIMARY"
-          renderText="Continue"
-          onClick={onButtonClick}
-        />
+
+      <div className="absolute bottom-0 right-0 left-0">
+      <hr/>
+       <div className="pl-5 pr-5 mt-3 mb-3">   
+          <Button
+            variant="PRIMARY"
+            renderText="Continue"
+            onClick={onButtonClick}
+          />
+       </div>
       </div>
     </main>
   );

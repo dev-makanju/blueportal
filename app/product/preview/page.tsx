@@ -48,15 +48,15 @@ const Page = async ({ params }: { params: { productId: string } }) => {
           <div className="flex items-center gap-2">
             <h1 className="text-black text-[20px]">₦{productData.price.toLocaleString()}</h1>
             <span className="text-gray-400 text-sm">₦{productData.originalPrice.toLocaleString()}</span>
-            <span className="rounded-full bg-[#8A226F] pl-2 pr-2 text-white">{productData.discount}% OFF</span>
+            <span className="rounded-full bg-[#8A226F] text-[14px] pl-2 pr-2 text-white">{productData.discount}% OFF</span>
           </div>
           <div className="flex items-center">
-            <span className="text-yellow-500">&#9733;</span>
-            <span className="text-yellow-500">&#9733;</span>
-            <span className="text-yellow-500">&#9733;</span>
-            <span className="text-yellow-500">&#9733;</span>
-            <span className="text-yellow-500">&#9733;</span>
-            <span className="ml-2 text-gray-400">({productData.reviews} sold)</span>
+            <span className="text-yellow-500 text-[10px]">&#9733;</span>
+            <span className="text-yellow-500 text-[10px]">&#9733;</span>
+            <span className="text-yellow-500 text-[10px]">&#9733;</span>
+            <span className="text-yellow-500 text-[10px]">&#9733;</span>
+            <span className="text-yellow-500 text-[10px]">&#9733;</span>
+            <span className="ml-2 text-gray-400 text-[12px]">({productData.reviews} sold)</span>
           </div>
         </div>
         <hr className="mt-5 mb-5" />
@@ -72,7 +72,7 @@ const Page = async ({ params }: { params: { productId: string } }) => {
             <div className="w-full flex justify-between mb-2">
               <div className="flex items-center">
                 <div className="flex justify-center border-2 items-center bg-[#eee] rounded-full h-[70px] w-[70px]">
-                  <Image src="/images/Product-Image.png" height={70} width={70} className="rounded-full object-fit" alt="menu icon" />
+                  <Image src="/images/Frame.png" height={70} width={70} className="rounded-full object-fit" alt="menu icon" />
                 </div>
                 <div className="ml-2">
                   <h2 className="tex-black text-sm">{productData.vendor.name}</h2>
