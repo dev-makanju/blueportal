@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Button from "../Button";
 import { progressTrackerTypes } from '@/types/main'
+import { useRouter } from "next/navigation";
 
 export default function OnBoardingLayout({
   children,
@@ -12,13 +13,17 @@ export default function OnBoardingLayout({
   children: React.ReactNode;
   onButtonClick: () => void;
 }) {
+  const router = useRouter()
   const { progress, totalStage } = progressTracker;
-
+  const handleRedirect  = () => {
+    router.back()
+  }
   return (
     <main className="relative h-screen">
       <header>
         <div className="flex p-5 gap-4">
           <Image
+            onClick={handleRedirect}
             src={"/svg/Icon.svg"}
             height={16}
             width={16}

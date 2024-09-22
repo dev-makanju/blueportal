@@ -5,8 +5,10 @@ import Step2 from '@/components/onboarding/step2'
 import Step3 from '@/components/onboarding/step3'
 import OnBoardingLayout from '@/components/wrappers/OnBoardingLayout'
 import {progressTrackerTypes} from '@/types/main'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
+    const router = useRouter()
     const [tracker, setTracker] = useState<progressTrackerTypes>({
        progress: 1,
        totalStage: 3,
@@ -17,6 +19,9 @@ const page = () => {
                 ...prev,
                 progress: prev.progress + 1
             }));
+        }
+        if(tracker.progress === tracker.totalStage){
+            router.push('/product/create-product')
         }
     }
 

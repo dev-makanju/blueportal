@@ -3,8 +3,10 @@ import React from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 import ScrollWrapper from "@/components/wrappers/ScrollWrapper";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+const router = useRouter()
   const handleCancel = () => {
     console.log("cancel");
   };
@@ -17,7 +19,7 @@ const Page = () => {
     <main>
         <header className="flex justify-between pl-5 pr-5 items-center mb-4 mt-4">
             <div className="flex gap-4">
-                <Image src="/svg/Icon.svg" height={16} width={16} alt="start icon" />
+                <Image onClick={() => router.back()} src="/svg/Icon.svg" height={16} width={16} alt="start icon" />
                 <h1 className="font-bold text-[16px]">Product preview</h1>
             </div>
             <Image

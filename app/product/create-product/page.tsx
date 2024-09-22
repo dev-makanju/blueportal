@@ -4,14 +4,16 @@ import Image from "next/image";
 import Button from "@/components/Button";
 import ScrollWrapper from "@/components/wrappers/ScrollWrapper";
 import Input from "@/components/Input";
+import { useRouter } from "next/navigation";
 
 const Page: React.FC = () => {
+  const router = useRouter()
   const handleCancel = () => {
     console.log("cancel");
   };
 
   const handleSave = () => {
-    console.log("save");
+    router.push('/product/majshbjwqkbq_mwdhn')
   };
 
   const addImage = () => {
@@ -22,7 +24,7 @@ const Page: React.FC = () => {
     <main>
         <header className="flex justify-between pl-5 pr-5 items-center mb-4 mt-4">
             <div className="flex gap-4">
-            <Image src="/svg/Icon.svg" height={16} width={16} alt="start icon" />
+            <Image onClick={() => router.back()} src="/svg/Icon.svg" height={16} width={16} alt="start icon" />
             <h1 className="font-bold text-[16px]">Create a Product</h1>
             </div>
             <Image
@@ -39,7 +41,7 @@ const Page: React.FC = () => {
                 <h1 className="text-sm text-gray-500">Draft</h1>
                 <Image src="/svg/check.svg" height={16} width={16} alt="start icon" />
                 </div>
-                <h1 className="font-bold text-[14px] text-[#8A226F]">Preview product</h1>
+                <h1 onClick={() => router.push('/product/preview')} className="font-bold text-[14px] text-[#8A226F]">Preview product</h1>
             </div>            
             <ScrollWrapper renderText="Basic details">
                 <div className="flex flex-col gap-4 pr-5 pl-5">
