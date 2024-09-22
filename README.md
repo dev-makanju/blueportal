@@ -34,3 +34,8 @@ SSG From the name static side generation, it generate static HTML files during b
 
 **MY OPINION**: Both can be used hands in hands when building a complex application, you can't choose one over another because they serve different purposes on App creation. The most important thing is making sure that any page that work as a server component should not be using an interaction states like use state or click event - put them in a separate component and apply 'use client' appropriately indicating that it's a client component.
 
+## How the middleware works
+When you route to anywhere with the path matching '/products' routes by default you will be redirected to the onboarding screen - when you click the 3 steps at the 3rd click on continue (3rd page of onboarding) a cookie is set showing that you are loggedIn.
+
+This method help us validate the login process.
+
