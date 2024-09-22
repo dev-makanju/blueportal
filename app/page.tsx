@@ -2,8 +2,11 @@
 import Button from '@/components/Button';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import NotificationManager from '@/components/notifications/NotificationManager';
+import  InstallPrompt  from '@/components/notifications/InstallPrompt';
 
 export default function Home() {
+
   const router = useRouter(); 
   const onButtonClick = () => {
     router.push('/onboarding')
@@ -11,6 +14,8 @@ export default function Home() {
 
   return (
     <main className="relative h-screen">
+      <NotificationManager/>
+      <InstallPrompt/>
       <div className='flex justify-center items-center flex-col mt-4'>
          <Image
             src='/svg/ShoppingSale.svg'
