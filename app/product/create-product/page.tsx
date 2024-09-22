@@ -14,6 +14,10 @@ const Page: React.FC = () => {
     console.log("save");
   };
 
+  const addImage = () => {
+    console.log('add')
+  }
+
   return (
     <main>
         <header className="flex justify-between pl-5 pr-5 items-center mb-4 mt-4">
@@ -22,14 +26,14 @@ const Page: React.FC = () => {
             <h1 className="font-bold text-[16px]">Create a Product</h1>
             </div>
             <Image
-            src="/svg/more_vert.svg"
-            height={20}
-            width={20}
-            className="mr-2"
-            alt="menu icon"
+                src="/svg/more_vert.svg"
+                height={20}
+                width={20}
+                className="mr-2"
+                alt="menu icon"
             />
         </header>
-        <div className="min-h-[100vh] relative">    
+        <div>    
             <div className="pl-5 pr-5 flex justify-between items-center mb-6">
                 <div className="flex gap-1 border rounded-full pr-2 pl-2">
                 <h1 className="text-sm text-gray-500">Draft</h1>
@@ -80,8 +84,8 @@ const Page: React.FC = () => {
             <hr className="mt-5 mb-5"/>
             <ScrollWrapper renderText="Product images">
                 <div className="flex flex-col gap-4 pr-5 pl-5">
-                   <Button variant="SECONDARY" renderText="Add Image" showRightIcon={<div>
-                      
+                   <Button onClick={addImage} variant="SECONDARY" renderText="Add Image" showRightIcon={<div>
+                    <Image src="/svg/AddIcon.svg" height={16} width={16} alt="start icon" />
                    </div>}/>
                 </div>
             </ScrollWrapper>
@@ -125,7 +129,7 @@ const Page: React.FC = () => {
                     />
                 </div>
             </ScrollWrapper>
-            <div className="absolute bottom-0 right-0 left-0">
+            <div>
                 <hr className="mt-5 mb-5"/>
                 <div className="flex gap-2 p-5">
                     <div className="flex-1">

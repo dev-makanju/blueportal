@@ -11,3 +11,11 @@ export interface progressTrackerTypes {
     totalStage: number;
 }
   
+export interface ButtonProps {
+    variant: buttonVariant;
+    renderText: string;
+    onClick?: () => void;
+    loading?: boolean;
+    showRightIcon?: React.ReactNode; 
+    showLeftIcon?: React.ReactNode;
+  }
