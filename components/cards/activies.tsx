@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const Activies = () => {
   return (
@@ -6,7 +7,7 @@ const Activies = () => {
        <div className="flex flex-col md:flex-row md:gap-4 overflow-hidden justify-between md:items-center md:mb-4 border-b-2 w-full border-gray-200 md:pr-8">
             <figure className="flex gap-4 flex-row pl-2 bg-white">
                 <figcaption className="flex flex-col items-center">
-                    <img className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
+                    <Image className="rounded-full w-9 h-9" height={30} width={30} src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
                 </figcaption>    
                 <div className="flex flex-col">
                     <div>
@@ -21,7 +22,7 @@ const Activies = () => {
         <div className="flex flex-col md:flex-row md:gap-4 overflow-hidden justify-between md:items-center md:mb-4 border-b-2 w-full border-gray-200 md:pr-8">
             <figure className="flex gap-4 flex-row pl-2 bg-white">
                 <figcaption className="flex flex-col items-center">
-                    <img className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
+                    <Image height={30} width={30} className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
                 </figcaption>    
                 <div className="flex flex-col">
                     <div>
@@ -36,7 +37,7 @@ const Activies = () => {
         <div className="flex flex-col md:flex-row md:gap-4 overflow-hidden justify-between md:items-center md:mb-4 border-b-2 w-full border-gray-200 md:pr-8">
             <figure className="flex gap-4 flex-row pl-2 bg-white">
                 <figcaption className="flex flex-col items-center">
-                    <img className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
+                    <Image height={30} width={30} className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
                 </figcaption>    
                 <div className="flex flex-col">
                     <div>
@@ -51,7 +52,7 @@ const Activies = () => {
         <div className="flex flex-col md:flex-row md:gap-4 overflow-hidden justify-between md:items-center md:mb-4 border-b-2 w-full border-gray-200 md:pr-8">
             <figure className="flex gap-4 flex-row pl-2 bg-white">
                 <figcaption className="flex flex-col items-center">
-                    <img className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
+                    <Image height={30} width={30} className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
                 </figcaption>    
                 <div className="flex flex-col">
                     <div>
@@ -66,7 +67,7 @@ const Activies = () => {
         <div className="flex flex-col md:flex-row md:gap-4 overflow-hidden justify-between md:items-center md:mb-4 border-b-2 w-full border-gray-200 md:pr-8">
             <figure className="flex gap-4 flex-row pl-2 bg-white">
                 <figcaption className="flex flex-col items-center">
-                    <img className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
+                    <Image height={30} width={30} className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile picture"/>
                 </figcaption>    
                 <div className="flex flex-col">
                     <div>
