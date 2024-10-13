@@ -13,13 +13,15 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false);
   const toggleModal = () => setShowModal(!showModal);
-
+  const setToggle = () => {
+    setIsVisible(!isVisible);
+  }
   return (
     <>
       <Search showModal={showModal} handleTrigger={toggleModal}/>
       <main className="relative h-screen flex">
           {/* Sidebar */}
-          <div className={`fixed top-0  z-40 h-screen p-4 overflow-y-auto transition-transform transform ${isVisible ? '-translate-x-full' : 'translate-x-0'} bg-gray-800 w-64`}>
+          <div className={`fixed top-0  z-40 h-screen p-4 overflow-y-auto transition-transform transform ${ !isVisible ? '-translate-x-full' : 'translate-x-0'} bg-gray-800 w-64`}>
             <h5 id="drawer-navigation-label" className="text-white font-semibold uppercase dark:text-white">
               Blue Portal
             </h5>
@@ -75,7 +77,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           <div className="w-full">
             <header className="flex items-center pl-5 pr-5 justify-between p-2 bg-[#eee] w-full">
               <button
-                onClick={() => setIsVisible(!isVisible)}
+                onClick={() => setToggle()}
                 className="flex gap-1 flex-col w-[20px] cursor-pointer"
               >
                 <div className="bg-gray-800 h-[4px] w-[20px] rounded-lg" />
