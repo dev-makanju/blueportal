@@ -20,7 +20,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       <main className="relative h-screen flex">
           {/* Sidebar */}
           <div className={`fixed top-0  z-40 h-screen p-4 overflow-y-auto transition-transform transform ${isVisible ? '-translate-x-full' : 'translate-x-0'} bg-gray-800 w-64`}>
-            <h5 id="drawer-navigation-label" className="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+            <h5 id="drawer-navigation-label" className="text-white font-semibold uppercase dark:text-white">
               Blue Portal
             </h5>
             <button
@@ -49,22 +49,22 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               <ul className="space-y-2 font-medium">
                 <li onClick={() => setIsVisible(!isVisible)}>
                   <Link href="/" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span className="ms-3">General</span>
+                    <span className="ms-3 text-white">General</span>
                   </Link>
                 </li>
                 <li onClick={() => setIsVisible(!isVisible)}>
                   <Link href="/collaborate" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span className="ms-3">Collaborate</span>
+                    <span className="ms-3 text-white">Collaborate</span>
                   </Link>
                 </li>
                 <li onClick={() => setIsVisible(!isVisible)}>
                   <Link href="/analysis" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span className="ms-3">Analysis</span>
+                    <span className="ms-3 text-white">Analysis</span>
                   </Link>
                 </li>
                 <li onClick={() => setIsVisible(!isVisible)}>
                   <Link href="/library" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span className="ms-3">Library</span>
+                    <span className="ms-3 text-white">Library</span>
                   </Link>
                 </li>
               </ul>
