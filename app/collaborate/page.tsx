@@ -15,7 +15,7 @@ const page = () => {
                         <span className="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
                         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
                     </div>
-                    <p className="text-sm font-normal py-2 text-gray-900 dark:text-white">Thats awesome. I think our users will really appreciate the improvements.</p>
+                    <p className="text-sm font-normal py-2 text-gray-900 dark:text-white">{`Thats awesome. I think our users will really appreciate the improvements.`}</p>
                     <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
                 </div>
             </div>
@@ -47,7 +47,7 @@ const page = () => {
             <div className="border-b pb-2">
               <h3 className="font-bold text-lg">Code Review</h3>
               <p className="text-gray-600">
-                Review each other's code to ensure quality and best practices. Provide constructive feedback and suggestions for improvement.
+                Review each others code to ensure quality and best practices. Provide constructive feedback and suggestions for improvement.
               </p>
             </div>
             <div className="border-b pb-2">
