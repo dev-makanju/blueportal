@@ -24,4 +24,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .auto-fit-card {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+  }
 }

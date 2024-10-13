@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-//import AppLayout from '../components/layouts/AppLayout'
+import AppLayout from '../components/layouts/AppLayout'
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "InstaShop",
-  description: "Shop with ease, we are always online and ready to serve your needs. ",
+  title: "blue portal",
+  description: "Learn and collaborate",
 };
 
 export default function RootLayout({
@@ -28,8 +28,10 @@ export default function RootLayout({
   
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased md: max-w-[500px] m-auto`}>
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <AppLayout>
+          {children}
+        </AppLayout>
       </body>
     </html>
   );
