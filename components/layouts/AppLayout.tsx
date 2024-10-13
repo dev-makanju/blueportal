@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from 'next/link';
 import Search from "../modals/search";
+import Image from "next/image";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -151,16 +152,17 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </div>
                   )}
                 </div>
-                <img    
+                <Image   
                   className="w-10 h-10 rounded-full border-2"
                   src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
                   alt="avatar"
+                  width={20}
+                  height={20}
                 />
                 <small className="font-bold hidden md:block">Oluwafemi</small>
               </div>
             </header>
 
-            {/* Page content */}
             <div className="p-4">
               {children}
             </div>

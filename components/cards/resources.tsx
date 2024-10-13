@@ -37,7 +37,7 @@ const Resources = ({
         const lines = doc.splitTextToSize(document, textWidth);
         let cursorY = startY;
     
-        lines.forEach((line) => {
+        lines.forEach((line: string) => {
             if (cursorY + lineHeight > pageHeight - margin) {
                 doc.addPage(); 
                 cursorY = startY; 
@@ -51,7 +51,7 @@ const Resources = ({
     
       
     return (
-     <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+     <div key={id} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
         <h1 className='p-3 text-3xl font-bold'>{title}</h1>
         <div className="p-3">
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{truncateText(desc, 70)}</p>

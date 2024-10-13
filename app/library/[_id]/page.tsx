@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const page = () => {
   return (
@@ -6,20 +7,23 @@ const page = () => {
        <div className='flex border-b-2 p-3 justify-between flex-wrap'>
            <button className='bg-gray-800 outline-none rounded-lg p-1 text-white'>Ask to edit</button>
            <div className='flex items-center gap-2'>
-                <img    
-                className="w-10 h-10 rounded-full border-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                alt="avatar"
+                <Image    
+                    className="rounded-full border-2"
+                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
+                    alt="avatar"
+                    width={20} height={20}
                 />
-                <img    
-                className="w-10 h-10 rounded-full border-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                alt="avatar"
+                <Image    
+                    className="rounded-full border-2"
+                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
+                    alt="avatar"
+                    width={20} height={20}
                 />
-                <img    
-                className="w-10 h-10 rounded-full border-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                alt="avatar"
+                <Image    
+                    className="rounded-full border-2"
+                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
+                    alt="avatar"
+                    width={20} height={20}
                 />
            </div>
        </div>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const page = () => {
   return (
@@ -8,7 +9,7 @@ const page = () => {
           <h2 className="text-xl font-semibold mb-2">Chat</h2>
           <div className="flex-1 overflow-y-auto h-full">     
             <div className="flex items-start gap-2.5">
-                <img className="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="Jeseimage"/>
+                <Image className="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" width={20} height={20} alt="Jeseimage"/>
                 <div className="flex flex-col w-full max-w-[320px] leading-1.5">
                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
                         <span className="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
