@@ -161,7 +161,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   width={20}
                   height={20}
                 />
-                <small className="font-bold hidden md:block">Oluwafemi</small>
+                <small className="font-bold hidden md:block">Banji</small>
               </div>
             </header>
 
