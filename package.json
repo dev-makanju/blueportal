@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "chart.js": "2.9.3",
     "jspdf": "^2.5.2",
     "next": "14.2.13",
     "react": "^18",

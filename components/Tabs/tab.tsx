@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Activies from "../cards/activies";
 import Project from "../cards/project";
+import CreateForm from "../modals/CreateForm";
+import AssignmentModal from "../modals/AssignmentModal";
 
 interface TabOptionProps {
   id: number;
@@ -12,11 +14,21 @@ interface TabOption {
 }
 
 const Tab: React.FC<TabOption> = ({ tabs }) => {
-  const [currentView, setCurrentView] = useState<string>(tabs[0]?.name || ""); // Default to the first tab
-
+  const [currentView, setCurrentView] = useState<string>(tabs[0]?.name || ""); 
+  const [showFormModal, setShowFormModal] = useState<boolean>(false);
+  const [showAssignmentModal, setShowAssignmentModal] = useState<boolean>(false);
+  
+  const handleShowFormModal = () => {
+    setShowFormModal(!showFormModal);
+  } 
+  
   const handleTabOptions = (val: string) => {
     setCurrentView(val);
   };
+
+  const  handleShowAssignmentModal = () => {
+    setShowAssignmentModal(!showAssignmentModal);
+  }
 
   return (
     <div>
@@ -51,7 +63,7 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
           <div className="flex justify-center items-center min-h-[400px] w-full">
             <div className='flex flex-col items-center'>  
                 <p>No {currentView} </p>
-                <button className='bg-gray-800 mt-[1rem] p-3 outline-none rounded-lg text-white'>Create a {currentView}</button>
+                <button onClick={() => setShowFormModal(!showFormModal) } className='bg-gray-800 mt-[1rem] p-3 outline-none rounded-lg text-white'>Create a {currentView}</button>
             </div>
           </div>
         )}
@@ -69,8 +81,8 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
         {currentView === "Assignments" && (
           <div className="flex justify-center items-center min-h-[400px] w-full">
              <div className='flex flex-col items-center'>  
-                <p>No {currentView} </p>
-                <button className='bg-gray-800 mt-[1rem] p-3 outline-none rounded-lg text-white'>Create an {currentView}</button>
+                <p>No {currentView}</p>
+                <button onClick={() => setShowAssignmentModal(!showAssignmentModal)} className='bg-gray-800 mt-[1rem] p-3 outline-none rounded-lg text-white'>Create an {currentView}</button>
             </div>
           </div>
         )}
@@ -85,6 +97,12 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
               </div>
           </div>
         )}
+      </div>
+      <div>
+        <CreateForm  showModal={showFormModal} handleTrigger={() => handleShowFormModal()} />
+      </div>
+      <div>
+        <AssignmentModal showModal={showAssignmentModal} handleTrigger={() => handleShowAssignmentModal()} />
       </div>
     </div>
   );
