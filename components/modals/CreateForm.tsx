@@ -19,7 +19,7 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
         reflection: '',
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,

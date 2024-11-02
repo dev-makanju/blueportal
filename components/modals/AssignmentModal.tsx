@@ -21,8 +21,8 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
+          ...prevData,
+          [name]: value,
         }));
     };
     

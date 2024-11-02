@@ -10,7 +10,7 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [showFilter, setShowFilter] = useState<boolean>(false)
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const toggleModal = () => setShowModal(!showModal);
   const setToggle = () => {

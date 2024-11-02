@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  LECTURER
+}
+
+model User {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?
+  image          String?
+  role           Role
+  assignments    Assignment[]  @relation("UserAssignments")
+  projects       Project[]     @relation("UserProjects")
+  lessonPlans    LessonPlan[]  @relation("UserLessonPlans")
+  activities     Activity[]    @relation("UserActivities")
+}
+
+model Assignment {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  subject       String
+  dueDate       DateTime
+  gradeLevel    String
+  instructions  String
+  resources     String?
+  userId        String   @db.ObjectId
+  user          User     @relation("UserAssignments", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String?
+  dueDate       DateTime
+  userId        String   @db.ObjectId
+  user          User     @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LessonPlan {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  gradeLevel    String
+  objectives    String
+  materials     String
+  lessonPhases  Json      // JSON to hold structured lesson phases with intro, main activity, practice, conclusion
+  assessment    String
+  reflection    String?
+  date          DateTime
+  userId        String   @db.ObjectId
+  user          User     @relation("UserLessonPlans", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  description   String
+  date          DateTime
+  userId        String   @db.ObjectId
+  user          User     @relation("UserActivities", fields: [userId], references: [id], onDelete: Cascade)
+}

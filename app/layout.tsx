@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+'use client'
 import localFont from "next/font/local";
 import "./globals.css";
 import AppLayout from '../components/layouts/AppLayout'
+import { usePathname } from 'next/navigation';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,23 +16,28 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata: Metadata = {
-  title: "blue portal",
-  description: "Learn and collaborate",
-};
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  
+    children,
+  }: Readonly<{
+    children: React.ReactNode;
+  }>) {
+
+  const pathname = usePathname();
+
+  const isAuthPage = pathname === '/sign-in' || pathname === '/sign-up';
+
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AppLayout>
-          {children}
-        </AppLayout>
+        {isAuthPage ? (
+          children
+        ) : (
+          <AppLayout>
+            {children}
+          </AppLayout>
+        )}
       </body>
     </html>
   );
