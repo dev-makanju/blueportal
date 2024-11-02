@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import AppLayout from '../components/layouts/AppLayout'
 import { usePathname } from 'next/navigation';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,10 +29,10 @@ export default function RootLayout({
 
   const isAuthPage = pathname === '/sign-in' || pathname === '/sign-up';
 
-
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <ToastContainer />
         {isAuthPage ? (
           children
         ) : (
