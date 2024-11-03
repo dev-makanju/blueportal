@@ -9,6 +9,14 @@ export const POST = async (req: Request) => {
       return NextResponse.json({ message: "Invalid Data" }, { status: 422 });
     }
 
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+    
+    if (existingUser) {
+      return NextResponse.json({ message: 'User already exists' }, { status: 400 });
+    }
+
    // const hashPassword = await bcrypt.hash(password, 10);
 
     await prisma.$connect();

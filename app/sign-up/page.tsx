@@ -45,14 +45,16 @@ const Page = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+      
+      const data = await res.json()
+      
       if (!res.ok) {
-        throw new Error("Registration failed");
+        throw new Error(`${ data?.message ||  'Something went wrong, please try again.'}`);
       }
       router.push("/sign-in");
       toast.success('User registered successfully');    
     } catch (err) {
-      setError(err.message);
+      setError(err.message); 
     } finally {
       setLoading(false);
     }
