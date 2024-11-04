@@ -113,7 +113,6 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                 <div className="p-4 md:p-5">
                     <form onSubmit={handleSubmit} className="p-6 rounded-lg max-w-3xl mx-auto mt-10">
                         <h2 className="text-2xl font-bold mb-6">Lesson Plan Form</h2>
-
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Lesson Title</label>
                             <input
