@@ -107,17 +107,19 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
       </div>
       <div id="default-styled-tab-content">
       {currentView === "Lesson Plans" && (
-          <div className="flex min-h-[400px] w-full">
+          <div className="flex min-h-[400px] w-full flex-col">
+            <button
+              onClick={handleShowFormModal}
+              className="bg-gray-800 p-3 text-white rounded-lg w-[200px] float-right"
+            >
+              Create a Lesson Plan
+            </button>
             {isLoading ? (
-              <p className='text-center'>Loading lesson plans...</p>
+              <div className="flex mt-4 text-center flex-col items-center">
+                <p>Fetching lesson plans...</p>
+              </div>
             ) : lessonPlans.length > 0 ? (
               <div className="w-full">
-                <button
-                  onClick={handleShowFormModal}
-                  className="bg-gray-800 p-3 text-white rounded-lg float-right"
-                >
-                  Create a Lesson Plan
-                </button>
                 {lessonPlans.map((plan) => (
                   <div key={plan?.id} className="p-4 border-b border-gray-300">
                     <h3 className="text-lg font-bold">{plan?.title}</h3>
