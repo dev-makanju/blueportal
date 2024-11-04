@@ -20,7 +20,6 @@ const Page = () => {
     role: "STUDENT",
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -32,12 +31,11 @@ const Page = () => {
     e.preventDefault();
 
     if (!formData.name || !formData.email || !formData.pass ) {
-      setError("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
     setLoading(true);
-    setError(null);
 
     try {
       const res = await fetch("/api/sign-up", {
@@ -53,7 +51,8 @@ const Page = () => {
       router.push("/sign-in");
       toast.success('User registered successfully');    
     } catch (err) {
-      setError(err.message); 
+      console.error("Login error:", err);
+      toast.error('Something went wrong'); 
     } finally {
       setLoading(false);
     }
@@ -67,12 +66,6 @@ const Page = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {error && (
-            <div className='bg-red-300 p-4 w-full'>
-               <p className="text-red-500 text-sm">{error}</p>
-            </div>    
-        )}
-
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Full Name

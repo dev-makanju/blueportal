@@ -88,7 +88,6 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                                 value={formData.description}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-blue-300"
-                                rows="4"
                                 placeholder="Brief description of the assignment"
                                 required
                                 />
@@ -139,7 +138,6 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                                 value={formData.instructions}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-blue-300"
-                                rows="4"
                                 placeholder="Detailed instructions for the assignment"
                                 required
                                 />

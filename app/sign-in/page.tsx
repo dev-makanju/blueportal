@@ -42,8 +42,9 @@ export default function SignIn() {
         return;
       }
        
-      localStorage.setItem('appData', JSON.stringify(data.data))
-      console.log(data);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("appData", JSON.stringify(data.data));
+      }
 
       router.push("/");
     } catch (error) {

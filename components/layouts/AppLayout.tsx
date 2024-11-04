@@ -22,7 +22,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [user , setUser] = useState<userType>({})
+  const [user , setUser] = useState<userType | null>()
   const toggleModal = () => setShowModal(!showModal);
   const setToggle = () => {
     setIsVisible(!isVisible);
@@ -30,9 +30,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
   const router = useRouter();
   
-  const logOut = () => {
-    console.log('hello');             
-    localStorage.removeItem('appData');
+  const logOut = () => {             
+    if (typeof window !== "undefined") {
+      localStorage.removeItem('appData');
+    }
     router.push('/sign-in')
   }
 
@@ -43,7 +44,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     }
     const appUser = JSON.parse(user as string);
     setUser(appUser);
-  },[])
+  },[router])
 
   return (
     <>

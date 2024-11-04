@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from "react";
 import Activies from "../cards/activies";
 import Project from "../cards/project";
@@ -11,6 +12,15 @@ interface TabOptionProps {
   name: string;
 }
 
+interface userType {
+  id: string;
+  image: string;
+  name: string;
+  role: string;
+  password: string;
+  emailVerified: null;
+}
+
 interface TabOption {
   tabs: TabOptionProps[];
 }
@@ -21,8 +31,16 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
   const [showAssignmentModal, setShowAssignmentModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [lessonPlans, setLessonPlans] = useState<LessonPlanProps[]>([]);
-  const user = localStorage.getItem('appData');
-  const appUser = JSON.parse(user as string);
+  const [appUser, setAppUser] = useState<userType | null>(null); 
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("appData");
+      if (user) {
+        setAppUser(JSON.parse(user));
+      }
+    }
+  }, [appUser]);
 
   const handleShowFormModal = () => {
     setShowFormModal(!showFormModal);
@@ -39,7 +57,7 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
   const fetchLessonPlans = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/plans?userId=${appUser.id}`, {
+      const response = await fetch(`/api/plans?userId=${appUser?.id}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });

@@ -66,7 +66,7 @@ export interface LessonPlanProps {
   lessonPhases: string;
   assessment: string;
   reflection: string;
-  date: string;
+  date: Date;
   userId: string;
 }
 

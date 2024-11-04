@@ -1,11 +1,11 @@
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 import { compareSync } from "bcryptjs";
-import jwt from "jsonwebtoken";
-import cookie from "cookie";
-import dayjs from "dayjs";
+// import jwt from "jsonwebtoken";
+// import cookie from "cookie";
+// import dayjs from "dayjs";
 
-const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
+// const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
 export const POST = async (req: Request) => {
   try {

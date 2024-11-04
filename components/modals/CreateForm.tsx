@@ -1,5 +1,5 @@
 'use client'
-import React,{ useState } from "react";
+import React,{ useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { LessonPlanProps } from "@/types/main";
 
@@ -8,12 +8,21 @@ interface FormProps {
   handleTrigger: () => void; 
 }
 
+interface userType {
+    id: string;
+    image: string;
+    name: string;
+    role: string;
+    password: string;
+    emailVerified: null;
+}
+  
+
 const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
     const [loading, setLoading] = useState(false);
-    const user = localStorage.getItem('appData');
-    const appUser = JSON.parse(user as string);
     const currentTime = new Date()
-    
+    const [appUser, setAppUser] = useState<userType>(); 
+
     const [formData, setFormData] = useState<LessonPlanProps>({
         title: '',
         gradeLevel: '',
@@ -23,10 +32,18 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
         date: currentTime,
         assessment: '',
         reflection: '',
-        userId: appUser.id as string,
+        userId: appUser?.id as string,
     });
 
-
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+           const user = localStorage.getItem("appData");
+            if (user) {
+              setAppUser(JSON.parse(user));
+              console.log(appUser)
+            }
+        }
+    }, [appUser]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -55,13 +72,13 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
             handleTrigger(); 
           }
         } catch (err) {
+          console.error("Login error:", err);
           toast.error('An unexpected error occurred. Please try again.');
         } finally {
           setLoading(false);
         }
     };
     
-
     return (
         <>
         {showModal && (
