@@ -1,11 +1,12 @@
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
+import { hashSync } from "bcryptjs";
 
 export const POST = async (req: Request) => {
   try {
-    const { name, email, password, role } = await req.json();
+    const { name, email, pass, role } = await req.json();
 
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !pass || !role) {
       return NextResponse.json({ message: "Invalid Data" }, { status: 422 });
     }
 
@@ -17,7 +18,7 @@ export const POST = async (req: Request) => {
       return NextResponse.json({ message: 'User already exists' }, { status: 400 });
     }
 
-   // const hashPassword = await bcrypt.hash(password, 10);
+   const password = hashSync(pass);
 
     await prisma.$connect();
     const user = await prisma.user.create({

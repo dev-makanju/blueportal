@@ -35,3 +35,44 @@ export interface ProductData {
   reviews: number;
   vendor: Vendor;
 }
+
+
+export interface Assignment {
+  id: string;
+  title: string;
+  description: string;
+  subject: string;
+  dueDate : string;
+  gradeLevel: string;
+  instructions: string;
+  resources: string;
+  userId: string;
+} 
+
+export interface ProjectProps {
+  id: string;
+  title: string;
+  description: string;
+  dueDate: string;
+  userId: string;
+}
+
+export interface LessonPlanProps {
+  id?: string;
+  title: string;
+  gradeLevel: string;
+  objectives: string;
+  materials: string;
+  lessonPhases: string;
+  assessment: string;
+  reflection: string;
+  date: string;
+  userId: string;
+}
+
+export interface ActivityProps{
+  id: string;
+  description: string;
+  date:string;
+  userId: string; 
+} 

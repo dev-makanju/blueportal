@@ -11,7 +11,11 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
     "@prisma/client": "^5.21.1",
+    "bcryptjs": "^2.4.3",
     "chart.js": "2.9.3",
+    "cookie": "^1.0.1",
+    "dayjs": "^1.11.13",
+    "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.2",
     "next": "14.2.13",
     "next-auth": "^4.24.10",
@@ -25,6 +29,8 @@
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

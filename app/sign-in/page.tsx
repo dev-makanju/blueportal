@@ -1,6 +1,5 @@
 'use client';
 import { useState, FormEvent, ChangeEvent } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 
 export default function SignIn() {
@@ -27,27 +26,32 @@ export default function SignIn() {
     setError('');
 
     try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       });
 
-      if (res?.error) {
-        setError('Invalid email or password');
-      } else {
-        router.push("/");
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Login failed. Please check your credentials and try again.');
+        return;
       }
+       
+      localStorage.setItem('appData', JSON.stringify(data.data))
+      console.log(data);
+
+      router.push("/");
     } catch (error) {
-      console.log(error)
+      console.error("Login error:", error);
       setError('An error occurred during login. Please try again.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
   };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -101,14 +105,6 @@ export default function SignIn() {
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
-          </button>
-          
-          <button
-            type="button"
-            onClick={handleGoogleSignIn}
-            className="w-full py-3 px-4 mt-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium"
-          >
-            Sign in with Google
           </button>
 
           <p className="text-sm text-center text-gray-600">

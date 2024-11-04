@@ -1,4 +1,7 @@
+'use client'
 import React,{ useState } from "react";
+import { toast } from "react-toastify";
+import { LessonPlanProps } from "@/types/main";
 
 interface FormProps {
   showModal: boolean;
@@ -6,18 +9,24 @@ interface FormProps {
 }
 
 const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
-    const [formData, setFormData] = useState({
+    const [loading, setLoading] = useState(false);
+    const user = localStorage.getItem('appData');
+    const appUser = JSON.parse(user as string);
+    const currentTime = new Date()
+    
+    const [formData, setFormData] = useState<LessonPlanProps>({
         title: '',
         gradeLevel: '',
         objectives: '',
         materials: '',
-        intro: '',
-        mainActivity: '',
-        practice: '',
-        conclusion: '',
+        lessonPhases: '',
+        date: currentTime,
         assessment: '',
         reflection: '',
+        userId: appUser.id as string,
     });
+
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -27,11 +36,31 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Lesson Plan:', formData);
-        alert('Lesson Plan submitted!');
+        setLoading(true);
+        console.log(formData)
+        try {
+          const res = await fetch('/api/plans/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+    
+          if (!res.ok) {
+            const { error } = await res.json();
+            toast.error(error || 'Failed to submit the lesson plan.');
+          } else {
+            toast.success('Lesson plan submitted successfully!');
+            handleTrigger(); 
+          }
+        } catch (err) {
+          toast.error('An unexpected error occurred. Please try again.');
+        } finally {
+          setLoading(false);
+        }
     };
+    
 
     return (
         <>
@@ -65,7 +94,6 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                     <span className="sr-only">Close modal</span>
                 </button>
                 <div className="p-4 md:p-5">
-                    {/* form */}
                     <form onSubmit={handleSubmit} className="p-6 rounded-lg max-w-3xl mx-auto mt-10">
                         <h2 className="text-2xl font-bold mb-6">Lesson Plan Form</h2>
 
@@ -119,7 +147,7 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                             />
                         </div>
 
-                        <div className="mb-4">
+                        {/* <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Introduction</label>
                             <textarea
                                 name="intro"
@@ -129,20 +157,20 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                                 placeholder="Enter a brief introduction for the lesson"
                                 required
                             />
-                        </div>
+                        </div> */}
 
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Main Activity</label>
                             <textarea
-                                name="mainActivity"
-                                value={formData.mainActivity}
+                                name="lessonPhases"
+                                value={formData.lessonPhases}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-green-300"
                                 placeholder="Describe the main activity for the lesson"
                                 required
                             />
                         </div>
-
+{/* 
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Practice</label>
                             <textarea
@@ -153,9 +181,9 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                                 placeholder="Describe the practice/exercise for the lesson"
                                 required
                             />
-                        </div>
+                        </div> */}
 
-                        <div className="mb-4">
+                        {/* <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Conclusion</label>
                             <textarea
                                 name="conclusion"
@@ -165,7 +193,7 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                                 placeholder="Summarize the lesson"
                                 required
                             />
-                        </div>
+                        </div> */}
 
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Assessment</label>
@@ -192,8 +220,9 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                         <button
                             type="submit"
                             className="w-full bg-[#00000054] hover:bg-[#00000054] text-white font-bold py-2 rounded-lg mt-4"
+                            disabled={loading}
                         >
-                            Submit Lesson Plan
+                            {loading ? 'Submitting...' : 'Submit Lesson Plan'}
                         </button>
                     </form>
                 </div>

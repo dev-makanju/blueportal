@@ -1,21 +1,50 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Link from 'next/link';
 import Search from "../modals/search";
 import Image from "next/image";
+import { useRouter } from 'next/navigation';
 
 interface AppLayoutProps {
   children: React.ReactNode;
+}
+
+interface userType {
+  id: string;
+  image: string;
+  name: string;
+  role: string;
+  password: string;
+  emailVerified: null;
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [user , setUser] = useState<userType>({})
   const toggleModal = () => setShowModal(!showModal);
   const setToggle = () => {
     setIsVisible(!isVisible);
   }
+
+  const router = useRouter();
+  
+  const logOut = () => {
+    console.log('hello');             
+    localStorage.removeItem('appData');
+    router.push('/sign-in')
+  }
+
+  useEffect(() => {
+    const user = localStorage.getItem('appData')
+    if(!user){
+      router.push('/sign-in');
+    }
+    const appUser = JSON.parse(user as string);
+    setUser(appUser);
+  },[])
+
   return (
     <>
       <Search showModal={showModal} handleTrigger={toggleModal}/>
@@ -161,7 +190,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   width={20}
                   height={20}
                 />
-                <small className="font-bold hidden md:block">Banji</small>
+                <small className="font-bold hidden md:block">{user?.name}</small>
+                <div onClick={logOut} className="font-bold cursor-pointer text-red-500">Log out</div>
               </div>
             </header>
 

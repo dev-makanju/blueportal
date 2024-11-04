@@ -8,7 +8,7 @@ export type Role = "STUDENT" | "LECTURER";
 interface SignUpProps {
   name: string;
   email: string;
-  password: string;
+  pass: string;
   role: Role;
 }
 
@@ -16,7 +16,7 @@ const Page = () => {
   const [formData, setFormData] = useState<SignUpProps>({
     name: "",
     email: "",
-    password: "",
+    pass: "",
     role: "STUDENT",
   });
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,7 +31,7 @@ const Page = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.password || !formData.role) {
+    if (!formData.name || !formData.email || !formData.pass ) {
       setError("Please fill in all fields");
       return;
     }
@@ -47,7 +47,6 @@ const Page = () => {
       });
       
       const data = await res.json()
-      
       if (!res.ok) {
         throw new Error(`${ data?.message ||  'Something went wrong, please try again.'}`);
       }
@@ -81,7 +80,6 @@ const Page = () => {
             <input
               type="text"
               name="name"
-              value={formData.name}
               onChange={handleChange}
               placeholder="Enter your full name"
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
@@ -95,7 +93,6 @@ const Page = () => {
             <input
               type="email"
               name="email"
-              value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
@@ -108,8 +105,7 @@ const Page = () => {
             </label>
             <input
               type="password"
-              name="password"
-              value={formData.password}
+              name="pass"
               onChange={handleChange}
               placeholder="Create a password"
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2"
@@ -149,7 +145,7 @@ const Page = () => {
 
           <p className="text-sm text-center text-gray-600">
             Already have an account?
-            <a href="/login" className="text-gray-800 font-semibold">
+            <a href="/sign-in" className="text-gray-800 font-semibold">
               Login
             </a>
           </p>
