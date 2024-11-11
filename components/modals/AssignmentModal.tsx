@@ -1,5 +1,7 @@
 'use client'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import { toast } from 'react-toastify';
+import { useUserStore } from '@/store/useUserStore';
 
 interface FormProps {
    showModal: boolean;
@@ -7,7 +9,8 @@ interface FormProps {
 }
 
 const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
-  
+    const [loading, setLoading] = useState(false);
+    const { id } = useUserStore()
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -17,6 +20,15 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
         instructions: '',
         resources: '',
     });
+
+    useEffect(() => {
+        if (id) {   
+            setFormData((prev)=> ({
+                ...prev,
+                userId: id
+            }))
+        }
+    },[id])
       
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -26,10 +38,29 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
         }));
     };
     
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Assignment:', formData);
-        alert('Assignment submitted!');
+        setLoading(true);
+        try {
+          const res = await fetch('/api/assignment/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+    
+          if (!res.ok) {
+            const { error } = await res.json();
+            toast.error(error || 'Failed to create an assignment.');
+          } else {
+            toast.success('Assignment submitted successfully!');
+            handleTrigger(); 
+          }
+        } catch (err) {
+          console.error("Login error:", err);
+          toast.error('An unexpected error occurred. Please try again.');
+        } finally {
+          setLoading(false);
+        }
     };
 
     return (
@@ -109,12 +140,12 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                             <div className="mb-4">
                                 <label className="block text-gray-700 font-bold mb-2">Due Date</label>
                                 <input
-                                type="date"
-                                name="dueDate"
-                                value={formData.dueDate}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-blue-300"
-                                required
+                                  type="date"
+                                  name="dueDate"
+                                  value={formData.dueDate}
+                                  onChange={handleChange}
+                                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-blue-300"
+                                  required
                                 />
                             </div>
 
@@ -158,8 +189,9 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                             <button
                                 type="submit"
                                 className="w-full bg-[#00000054] hover:bg-[#00000054] text-white font-bold py-2 rounded-lg mt-4"
+                                disabled={loading || !id}
                             >
-                                Submit Assignment
+                                {loading ? 'Creating...' : 'Create Assignment'}
                             </button>
                             </form>
                     </div>

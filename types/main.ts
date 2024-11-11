@@ -70,9 +70,46 @@ export interface LessonPlanProps {
   userId: string;
 }
 
+
+export interface ProjectTypes {
+  content: string;
+  description: string;
+  dueDate: Date;
+  tags: string;
+  title: string;
+  date: string;
+  userId: string;
+}
+
+export interface AssignmentTypes {
+  id?: string;
+  title: string;
+  gradeLevel: string;
+  instructions: string;
+  resources: string;
+  subject: string;
+  description: string;
+  materials: string;
+  dueDate: Date;
+  userId: string;
+}
+
 export interface ActivityProps{
   id: string;
   description: string;
   date:string;
   userId: string; 
 } 
+
+
+export interface UserTypes {
+  token: string;
+  email: string;
+  emailVerified: string; 
+  id: string;
+  image: string,
+  name: string;
+  role: string;
+  fetchingUser: boolean;
+  signingIn: boolean;
+}

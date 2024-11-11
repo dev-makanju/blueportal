@@ -1,17 +1,19 @@
 'use client';
 import { useState, FormEvent, ChangeEvent } from "react";
 import { useRouter } from 'next/navigation';
+import { useUserStore } from "@/store/useUserStore";
+import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const loginUser = useUserStore(state => state.loginUser);
+  const loading = useUserStore(state => state.signingIn)
 
   const validateForm = (): boolean => {
     if (!email || !password) {
-      setError('Please fill in all fields');
+      toast.error('Please fill in all fields');
       return false;
     }
     return true;
@@ -21,37 +23,18 @@ export default function SignIn() {
     e.preventDefault();
 
     if (!validateForm()) return;
-
-    setLoading(true);
-    setError('');
-
+    
     try {
-      const res = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Login failed. Please check your credentials and try again.');
-        return;
-      }
-       
-      if (typeof window !== "undefined") {
-        localStorage.setItem("appData", JSON.stringify(data.data));
-      }
-
-      router.push("/");
-    } catch (error) {
-      console.error("Login error:", error);
-      setError('An error occurred during login. Please try again.');
-    } finally {
-      setLoading(false);
+      const response = await loginUser({ email, password });
+    
+      if (response?.error) {
+        toast.error(response.error || 'Login failed. Please check your credentials and try again.');
+      } else {
+        router.push("/");
+      } 
+    }catch (err) {
+      console.error("Login error:", err);
+      toast.error('An error occurred during login. Please try again.');
     }
   };
 
@@ -71,7 +54,6 @@ export default function SignIn() {
         </h2>
         
         <form className="space-y-5" onSubmit={handleSubmit}>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email

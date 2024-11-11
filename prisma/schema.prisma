@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,17 +13,19 @@ enum Role {
 }
 
 model User {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  id             String               @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
-  email          String?       @unique
+  email          String?              @unique
   emailVerified  DateTime?
   image          String?
   role           Role
   password       String 
-  assignments    Assignment[]  @relation("UserAssignments")
-  projects       Project[]     @relation("UserProjects")
-  lessonPlans    LessonPlan[]  @relation("UserLessonPlans")
-  activities     Activity[]    @relation("UserActivities")
+  assignments    Assignment[]         @relation("UserAssignments")
+  projects       Project[]            @relation("UserProjects")
+  lessonPlans    LessonPlan[]         @relation("UserLessonPlans")
+  activities     Activity[]           @relation("UserActivities")
+  contributions  ProjectContributor[] @relation("UserContributions")
+  ratings        ProjectRating[]      @relation("UserRatings")
 }
 
 model Assignment {
@@ -32,7 +33,7 @@ model Assignment {
   title         String
   description   String
   subject       String
-  dueDate       DateTime
+  dueDate       String
   gradeLevel    String
   instructions  String
   resources     String?
@@ -41,12 +42,31 @@ model Assignment {
 }
 
 model Project {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String               @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String?
-  dueDate       DateTime
-  userId        String   @db.ObjectId
-  user          User     @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
+  dueDate       String
+  userId        String               @db.ObjectId
+  user          User                 @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
+  content       String?        
+  ratings       ProjectRating[]
+  contributors  ProjectContributor[] @relation("ProjectContributions")
+  tags          ProjectTag[]         @relation("ProjectTags")
+}
+
+model ProjectRating {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  projectId     String    @db.ObjectId
+  userId        String    @db.ObjectId
+  user          User      @relation("UserRatings", fields: [userId], references: [id], onDelete: Cascade)
+  project       Project   @relation(fields: [projectId], references: [id], onDelete: Cascade) 
+  rating        Int
+}
+
+model Tag {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  projects  ProjectTag[]
 }
 
 model LessonPlan {
@@ -61,6 +81,22 @@ model LessonPlan {
   date          DateTime
   userId        String   @db.ObjectId
   user          User     @relation("UserLessonPlans", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ProjectContributor {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId String   @db.ObjectId
+  userId    String   @db.ObjectId 
+  project   Project  @relation("ProjectContributions", fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserContributions", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ProjectTag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId String   @db.ObjectId
+  tagId     String   @db.ObjectId 
+  project   Project  @relation("ProjectTags", fields: [projectId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
 }
 
 model Activity {

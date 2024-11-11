@@ -2,26 +2,17 @@
 import React,{ useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { LessonPlanProps } from "@/types/main";
+import { useUserStore } from "@/store/useUserStore";
 
 interface FormProps {
   showModal: boolean;
   handleTrigger: () => void; 
-}
-
-interface userType {
-    id: string;
-    image: string;
-    name: string;
-    role: string;
-    password: string;
-    emailVerified: null;
-}
-  
+} 
 
 const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
     const [loading, setLoading] = useState(false);
     const currentTime = new Date()
-    const [appUser, setAppUser] = useState<userType>(); 
+    const { id } = useUserStore(state => state); 
 
     const [formData, setFormData] = useState<LessonPlanProps>({
         title: '',
@@ -32,18 +23,18 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
         date: currentTime,
         assessment: '',
         reflection: '',
-        userId: appUser?.id as string,
+        userId: '',
     });
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-           const user = localStorage.getItem("appData");
-            if (user) {
-              setAppUser(JSON.parse(user));
-              console.log(appUser)
-            }
+        if (id) {   
+            setFormData((prev)=> ({
+                ...prev,
+                userId: id
+            }))
         }
-    }, [appUser]);
+    },[id])
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -56,7 +47,6 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        console.log(formData)
         try {
           const res = await fetch('/api/plans/create', {
             method: 'POST',
@@ -236,7 +226,7 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                         <button
                             type="submit"
                             className="w-full bg-[#00000054] hover:bg-[#00000054] text-white font-bold py-2 rounded-lg mt-4"
-                            disabled={loading}
+                            disabled={loading || !id}
                         >
                             {loading ? 'Submitting...' : 'Submit Lesson Plan'}
                         </button>

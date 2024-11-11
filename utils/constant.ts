@@ -33,6 +33,22 @@ export const TABS_OPTION = [
   }
 ]
 
+
+export const STUDENT_TABS_OPTION = [
+  {
+    id:1,
+    name: 'Lesson Plans'
+  },
+  {
+    id:2,
+    name: 'Activities'
+  },
+  {
+    id:3,
+    name: 'Assignments'
+  },
+]
+
 export const RESOURCES = [
   {
     id: 1,
