@@ -9,13 +9,11 @@ export const POST = async (req: Request) => {
       content,
       description,
       dueDate,
-      tags,
       title,
-      date,
       userId,
     }: ProjectTypes = await req.json();
 
-    if (!title || !content || !description || !tags || !dueDate || !userId) {
+    if (!title || !content || !description || !dueDate || !userId) {
       return NextResponse.json(
         { error: "Please provide all required fields" },
         { status: 400 }
@@ -27,17 +25,15 @@ export const POST = async (req: Request) => {
         content,
         description,
         dueDate,
-        tags,
         title,
-        date,
         userId,
       },
     });
     return NextResponse.json(newProject, { status: 201 });
   } catch (error) {
-    console.error("Error creating lesson plan:", error);
+    console.error("Error creating project:", error);
     return NextResponse.json(
-      { error: "Failed to create lesson plan" },
+      { error: "Failed to create project" },
       { status: 500 }
     );
   }

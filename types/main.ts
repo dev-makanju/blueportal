@@ -70,14 +70,37 @@ export interface LessonPlanProps {
   userId: string;
 }
 
+export interface Contributor {
+  id: string;
+  projectId: string;
+  userId: string; 
+  project: SingleProjectProps; 
+  user: UserTypes;
+  status: string;
+  createdAt: string;
+}
+
+export interface SingleProjectProps {
+    id: string;
+    title: string;
+    description: string;
+    dueDate: string;
+    userId: string;
+    content: string;
+    user: UserTypes;
+    tags: [];
+    contributors: [];
+    ratings: [];
+}
 
 export interface ProjectTypes {
+  id?: string;
   content: string;
   description: string;
   dueDate: Date;
-  tags: string;
+  rating?: number;
+  tags?: string[];
   title: string;
-  date: string;
   userId: string;
 }
 
@@ -110,6 +133,6 @@ export interface UserTypes {
   image: string,
   name: string;
   role: string;
-  fetchingUser: boolean;
-  signingIn: boolean;
+  fetchingUser?: boolean;
+  signingIn?: boolean;
 }

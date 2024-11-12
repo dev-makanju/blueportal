@@ -1,11 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import Resources from '@/components/cards/resources'
 import { toast } from "react-toastify"
+import { ProjectTypes } from '@/types/main'
+import Resources from '../../components/cards/resources'
 
 const Page = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<ProjectTypes[]>([]);
   const fetchPublicProject = async () => {
     setLoading(true);
     try {
@@ -34,7 +35,9 @@ const Page = () => {
       ):projects.length > 0 ? (
         projects.map(project => (
           <Resources
-            id={project.id}
+            id={project.id as string}
+            content={project.content}
+            key={project.id}
             desc={project.description}
             title={project.title}
             rating={project.rating || 0}

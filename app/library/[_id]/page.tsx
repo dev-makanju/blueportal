@@ -1,37 +1,171 @@
-import React from 'react'
-import Image from 'next/image'
+'use client';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { Editor } from 'react-draft-wysiwyg';
+import { useUserStore } from '@/store/useUserStore';
+import { toast } from 'react-toastify';
+import { SingleProjectProps, Contributor } from '@/types/main';
 
-const page = () => {
-  return (
-    <div className='border-2 lg:w-3/5 m-auto min-h-[400px] mt-5'>
-       <div className='flex border-b-2 p-3 justify-between flex-wrap'>
-           <button className='bg-gray-800 outline-none rounded-lg p-1 text-white'>Ask to edit</button>
-           <div className='flex items-center gap-2'>
-                <Image    
-                    className="rounded-full border-2"
-                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                    alt="avatar"
-                    width={20} height={20}
+type PageParams = {
+  _id: string;
+};
+
+const Page: React.FC = () => {
+    const { role, id } = useUserStore(state => state); 
+    const params: PageParams = useParams();
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
+    const [isRequestPending, setIsRequestPending] = useState<boolean>(false);
+    const [isEditingApproved, setIsEditingApproved] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [project, setProject] = useState<SingleProjectProps | null>(null);
+  
+    const isOwner = project?.userId === id;
+  
+    const onEditorStateChange = (newEditorState: EditorState) => {
+      setEditorState(newEditorState);
+    };
+  
+    const handleRequestEdit = async (value: string) => {
+      try {
+        const response = await fetch("/api/project/edit-request", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: id, projectId: params._id, statusType: value }),
+        });
+  
+        const data = await response.json();
+        if (!response.ok) {
+          toast.error(data.error || "Failed to send request");
+          return;
+        }
+  
+        toast.success("Edit request sent successfully");
+        setIsRequestPending(true);
+      } catch (error) {
+        console.error("Failed to send edit request:", error);
+        toast.error("An error occurred. Please try again.");
+      }
+    };
+  
+    const fetchProjectByID = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/project/single?_id=${params._id}`);
+        if (!response.ok) throw new Error("Failed to fetch project");
+        const data = await response.json();
+        setProject(data);
+  
+        if (data.content) {
+          const blocksFromHtml = htmlToDraft(data.content);
+          const contentState = ContentState.createFromBlockArray(blocksFromHtml.contentBlocks, blocksFromHtml.entityMap);
+  
+          const pending = data.contributors.find(
+            (item: Contributor) => item.userId === id && item.projectId === params._id
+          );
+  
+          if (pending?.status === 'PENDING') setIsRequestPending(true);
+          if (pending?.status === 'APPROVED') setIsEditingApproved(true);
+          
+          setEditorState(EditorState.createWithContent(contentState));
+        }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching project:", error);
+        toast.error("Failed to fetch project. Please try again.");
+      }
+    };
+  
+    useEffect(() => {
+      fetchProjectByID();
+    }, []);
+  
+    const renderedContent =
+      role === 'LECTURER' && (isEditingApproved || isOwner)
+        ? draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        : project?.content || "No content available";
+  
+    return (
+      <div className="lg:flex lg:justify-center lg:gap-6 mt-5">
+        {loading ? (
+          <div className="border-2 lg:w-3/5 min-h-[400px]">
+            <p className="text-center mb-6">Loading...</p>
+          </div>
+        ) : (
+          <div className="lg:w-3/5 border-2 min-h-[400px]">
+            <div className="flex border-b-2 p-3 justify-between flex-wrap">
+              {role === 'LECTURER' && !isOwner && !isEditingApproved && (
+                <button
+                  className="bg-gray-800 outline-none rounded-lg p-1 text-white"
+                  onClick={() => handleRequestEdit("PENDING")}
+                  disabled={isRequestPending}
+                >
+                  {isRequestPending ? "Pending edit request" : "Ask to edit"}
+                </button>
+              )}
+              <div className="flex items-center gap-2">
+                <Image
+                  className="rounded-full border-2"
+                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
+                  alt="avatar"
+                  width={20}
+                  height={20}
                 />
-                <Image    
-                    className="rounded-full border-2"
-                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                    alt="avatar"
-                    width={20} height={20}
+              </div>
+            </div>
+            <div className="p-2 mt-3">
+              {(role === "LECTURER" && (isEditingApproved || isOwner)) ? (
+                <Editor
+                  editorState={editorState}
+                  wrapperClassName="demo-wrapper"
+                  editorClassName="demo-editor"
+                  onEditorStateChange={onEditorStateChange}
                 />
-                <Image    
-                    className="rounded-full border-2"
-                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                    alt="avatar"
-                    width={20} height={20}
-                />
-           </div>
-       </div>
-       <div className='p-2 mt-3'>
-            {`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BCSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?1914 translation by H. RackhamBut I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure? Section 1.10.33 of de Finibus Bonorum et Malorum, written by Cicero in 45 BCAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.1914 translation by H. RackhamOn the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.`}
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: renderedContent }} />
+              )}
+            </div>
+            {role === "LECTURER" && isEditingApproved && (
+              <div className="flex border-b-2 p-3 justify-between flex-wrap">
+                <button className="bg-gray-800 outline-none rounded-lg p-1 text-white">
+                  Submit your work
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+  
+        <div className="lg:w-1/4 border-2 p-4 mt-5 lg:mt-0 bg-gray-50">
+          <h3 className="text-lg font-bold mb-4">Project Details</h3>
+          <div className="mb-3">
+            <p className="font-semibold">Contributors:</p>
+            {project?.contributors?.length ? (
+              project.contributors.map((contributor: Contributor, index) => (
+                <div key={index} className="flex gap-4">
+                  <p>{contributor.user.name}</p>
+                  {isOwner && contributor.status === "PENDING" && (
+                    <button
+                      className="bg-gray-800 outline-none rounded-lg p-1 text-white"
+                      onClick={() => handleRequestEdit("APPROVED")}
+                    >
+                      Approve request
+                    </button>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p>No contributors</p>
+            )}
+          </div>
         </div>
-    </div>
-  )
-}
-
-export default page
+      </div>
+    );
+};
+  
+export default Page;
+  

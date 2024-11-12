@@ -4,9 +4,15 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/useUserStore';
 
-const ProjectModal = ({ isOpen, onClose }) => {
-  const [loading, setLoading] = useState(false);
+interface FormProps {
+    isOpen: boolean;
+    onClose: () => void; 
+} 
   
+
+const ProjectModal = ({ isOpen, onClose }:FormProps) => {
+  const [loading, setLoading] = useState(false);
+
   const { id: userId } = useUserStore(state => state); 
 
   const formik = useFormik({
@@ -25,7 +31,11 @@ const ProjectModal = ({ isOpen, onClose }) => {
       tags: Yup.string().required('Tags are required'),
     }),
     onSubmit: async (values) => {
-      const payload = { ...values, userId } 
+      const payload = { 
+        ...values, 
+        userId, 
+        tags: values.tags.split(',').map(tag => tag.trim())
+      } 
       setLoading(true);
       try {
         const res = await fetch('/api/project/create', {

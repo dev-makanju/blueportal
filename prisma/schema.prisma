@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ContributionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum Role {
   STUDENT
   LECTURER
@@ -45,7 +51,7 @@ model Project {
   id            String               @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String?
-  dueDate       String
+  dueDate       D
   userId        String               @db.ObjectId
   user          User                 @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
   content       String?        
@@ -89,6 +95,8 @@ model ProjectContributor {
   userId    String   @db.ObjectId 
   project   Project  @relation("ProjectContributions", fields: [projectId], references: [id], onDelete: Cascade)
   user      User     @relation("UserContributions", fields: [userId], references: [id], onDelete: Cascade)
+  status    ContributionStatus @default(PENDING)
+  createdAt DateTime @default(now())
 }
 
 model ProjectTag {

@@ -3,12 +3,14 @@ import React from 'react';
 import { jsPDF } from "jspdf";
 import { stringToSlug, truncateText} from '@/utils/utililty';
 import Link from 'next/link';
+import { useUserStore } from '@/store/useUserStore';
 
 interface resourceProps {
-    id: number,
+    id: string,
     title: string,
     desc: string,
     rating: number,
+    content: string,
     tags: string[]
 }
 
@@ -17,8 +19,10 @@ const Resources = ({
    title,
    desc,
    rating,
-   tags 
+   tags,
+   content 
 }: resourceProps) => { 
+    const { role } = useUserStore(state => state)
     const downLoadResourseAsPDF = (title: string, document: string) => {
         const doc = new jsPDF({
             orientation: "portrait",
@@ -49,27 +53,28 @@ const Resources = ({
         doc.save(`${stringToSlug(title)}.pdf`);
     };
     
-      
     return (
-     <div key={id} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+     <div key={id} className="max-w-sm bg-white border h-[350px] border-gray-200 rounded-lg shadow relative">
         <h1 className='p-3 text-3xl font-bold'>{title}</h1>
-        <div className="p-3">
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{truncateText(desc, 70)}</p>
-        <div className='flex mt-3 gap-1'>
-           <span>{rating}/5</span>
-           <span className="text-gold">★</span> 
-        </div>
-        <div className='flex mt-3 gap-2'>
-            { tags?.map((tag, _) => (
-                <span key={_} className='bg-gray-800 p-1 rounded-lg text-white'>{tag}</span>
-            ))}         
-        </div>
-        <div className='flex mt-3'>
-            <Link className='flex-1 border text-center text-[12px] p-2 text-gray hover:bg-gray-800 hover:text-white' href={`/library/${stringToSlug(title)}`}>
-               remix
-            </Link>
-            <button className='flex-1 border text-[12px] p-2 hover:text-white hover:bg-gray-800' onClick={() => downLoadResourseAsPDF(title, desc)}>download</button>
-        </div>
+        <div className='absolute bottom-0 right-0 left-0'>   
+            <div className="p-3 h-[200px] relative">
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{truncateText(desc, 70)}</p>
+                <div className='flex mt-3 gap-1'>
+                <span>{rating}/5</span>
+                <span className="text-gold">★</span> 
+                </div>
+                <div className='flex mt-3 gap-2'>
+                    { tags?.map((tag, _) => (
+                        <span key={_} className='bg-gray-800 p-1 rounded-lg text-white'>{tag}</span>
+                    ))}         
+                </div>
+                <div className='flex mt-3 absolute bottom-2 right-0 left-0'>
+                    <Link className='flex-1 border text-center text-[12px] p-2 text-gray hover:bg-gray-800 hover:text-white' href={`/library/${id}`}>
+                      {role === "LECTURER" ? 'remix' : 'view'}
+                    </Link>  
+                    <button className='flex-1 border text-[12px] p-2 hover:text-white hover:bg-gray-800' onClick={() => downLoadResourseAsPDF(title, content)}>download</button>
+                </div>
+            </div>
         </div>
     </div>
   )

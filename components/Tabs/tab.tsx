@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { LessonPlanProps, AssignmentTypes, ProjectTypes } from "@/types/main";
 import { useUserStore } from "@/store/useUserStore";
 import Resources from "@/components/cards/resources";
-import { RESOURCES } from "@/utils/constant";
 
 interface TabOptionProps {
   id: number;
@@ -22,8 +21,7 @@ interface TabOption {
 const Tab: React.FC<TabOption> = ({ tabs }) => {
   const [currentView, setCurrentView] = useState<string>(tabs[0]?.name || "");
   const [showFormModal, setShowFormModal] = useState<boolean>(false);
-  const [showAssignmentModal, setShowAssignmentModal] =
-    useState<boolean>(false);
+  const [showAssignmentModal, setShowAssignmentModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showProjectModal, setShowProjectModal] = useState<boolean>(false);
   const [lessonPlans, setLessonPlans] = useState<LessonPlanProps[]>([]);
@@ -161,9 +159,9 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
                 <p>Fetching lesson plans...</p>
               </div>
             ) : lessonPlans.length > 0 ? (
-              <div className="w-full">
+              <div className="w-full flex flex-wrap gap-4">
                 {lessonPlans.map((plan) => (
-                  <div key={plan?.id} className="p-4 border-b border-gray-300">
+                  <div key={plan?.id} className="p-6 mt-5 border w-full sm:w-[48%] h-[450px] overflow-y-auto border-gray-300 rounded-lg bg-white shadow-sm">
                     <h3 className="text-lg font-bold">{plan?.title}</h3>
                     <div className="text-sm text-gray-500 mb-4">
                       <p>
@@ -243,11 +241,11 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
                 <p>Fetching assignment...</p>
               </div>
             ) : assignments.length > 0 ? (
-              <div className="w-full flex flex-wrap gap-4 space-y-6">
+              <div className="w-full flex flex-wrap gap-4">
                 {assignments.map((assign) => (
                   <div
                     key={assign?.id}
-                    className="p-6 mt-5 border min-w-[50%] border-gray-300 rounded-lg bg-white shadow-sm"
+                    className="p-6 mt-5 border w-full sm:w-[48%] h-[600px] overflow-y-auto border-gray-300 rounded-lg bg-white shadow-sm"
                   >
                     <h3 className="text-2xl font-semibold text-gray-800 mb-4">
                       {assign?.title}
@@ -291,7 +289,7 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
                     </div>
 
                     <p className="text-sm text-gray-400 mt-4">
-                      Created on: {new Date(assign?.date).toLocaleDateString()}
+                      Created on: {new Date(assign?.dueDate).toLocaleDateString()}
                     </p>
                   </div>
                 ))}
@@ -307,7 +305,7 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
           <div className="w-full flex flex-col">
             <button
               onClick={handleShowProjectModal}
-              className="bg-gray-800 p-3 text-white rounded-lg w-[200px] float-right"
+              className="bg-gray-800 p-3 mb-5 text-white rounded-lg w-[200px] float-right"
             >
               Create Project
             </button>
@@ -317,13 +315,15 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
               </div>
             ) : projects.length > 0 ? (
               <div className="auto-fit-card gap-5  mb-[6rem]">
-                {RESOURCES.map((resource) => (
+                {projects.map((project) => (
                   <Resources
-                    key={resource.id}
-                    desc={resource.description}
-                    title={resource.title}
-                    rating={resource.rating}
-                    tags={resource.tags}
+                    id={project?.id as string}
+                    key={project?.id}
+                    content={project.content}
+                    desc={project?.description}
+                    title={project?.title}
+                    rating={project?.rating ? Number(project?.rating) : 0 }
+                    tags={project.tags || []}
                   />
                 ))}
               </div>

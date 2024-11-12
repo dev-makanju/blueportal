@@ -10,9 +10,9 @@ export const GET = async (req: Request) => {
     }
     try {    
         const lessonPlans = await prisma.lessonPlan.findMany({
-        where: {
-            userId: userId,
-        },
+            where: {
+                userId: userId,
+            },
         });
 
         return NextResponse.json(lessonPlans);
