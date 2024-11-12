@@ -97,7 +97,7 @@ export interface ProjectTypes {
   id?: string;
   content: string;
   description: string;
-  dueDate: Date;
+  dueDate: string;
   rating?: number;
   tags?: string[];
   title: string;
@@ -113,7 +113,7 @@ export interface AssignmentTypes {
   subject: string;
   description: string;
   materials: string;
-  dueDate: Date;
+  dueDate: string;
   userId: string;
 }
 

@@ -51,7 +51,7 @@ model Project {
   id            String               @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String?
-  dueDate       D
+  dueDate       String
   userId        String               @db.ObjectId
   user          User                 @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
   content       String?        

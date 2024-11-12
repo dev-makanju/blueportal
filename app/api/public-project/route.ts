@@ -1,7 +1,7 @@
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export const GET = async (req) => {
+export const GET = async () => {
     try {    
         const projects = await prisma.project.findMany({
             include: {
