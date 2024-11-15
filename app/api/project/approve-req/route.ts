@@ -13,23 +13,24 @@ export const POST = async (req: Request) => {
       where: {
         userId,
         projectId,
+        
       },
     });
 
     if (existingRequest) {
-      return NextResponse.json({ error: "You already have a pending edit request" }, { status: 400 });
+       const updateRequest = await prisma.projectContributor.update({
+          where: {
+            id: existingRequest.id
+          },
+          data: {
+            status: statusType
+          }
+       });
+
+       return NextResponse.json(updateRequest , { status: 200 });
+    }else{
+      return NextResponse.json({ error: "Request does not exist" }, { status: 404 });
     }
-
-
-    const editRequest = await prisma.projectContributor.create({
-      data: {
-        userId,
-        projectId,
-        status: statusType,
-      },
-    });
-
-    return NextResponse.json(editRequest, { status: 201 });
   } catch (error) {
     console.error("Error creating edit request:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

@@ -23,7 +23,9 @@ const Page: React.FC = () => {
     const [isEditingApproved, setIsEditingApproved] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [project, setProject] = useState<SingleProjectProps | null>(null);
-  
+    const [approving, setApproving] = useState<boolean>(false);
+    const [submitting, setSubmitting] = useState<boolean>(false);
+
     const isOwner = project?.userId === id;
   
     const onEditorStateChange = (newEditorState: EditorState) => {
@@ -43,7 +45,6 @@ const Page: React.FC = () => {
           toast.error(data.error || "Failed to send request");
           return;
         }
-  
         toast.success("Edit request sent successfully");
         setIsRequestPending(true);
       } catch (error) {
@@ -51,6 +52,30 @@ const Page: React.FC = () => {
         toast.error("An error occurred. Please try again.");
       }
     };
+
+    const approveRequest = async (value: string, collaboratorId: string) => {
+      setApproving(true)
+      try {
+        const response = await fetch("/api/project/approve-req", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: collaboratorId, projectId: params._id, statusType: value }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          toast.error(data.error || "Failed to approve request");
+          setApproving(false);
+          return;
+        }
+        setIsEditingApproved(true);
+        setApproving(false);
+        toast.success("Request approve successfully");
+      } catch(error) {
+        setApproving(false);
+        console.error("Failed to approve request:", error);
+        toast.error("An error occurred. Please try again.");
+      }
+    }
   
     const fetchProjectByID = async () => {
       setLoading(true);
@@ -59,17 +84,15 @@ const Page: React.FC = () => {
         if (!response.ok) throw new Error("Failed to fetch project");
         const data = await response.json();
         setProject(data);
-  
         if (data.content) {
           const blocksFromHtml = htmlToDraft(data.content);
           const contentState = ContentState.createFromBlockArray(blocksFromHtml.contentBlocks, blocksFromHtml.entityMap);
-  
           const pending = data.contributors.find(
             (item: Contributor) => item.userId === id && item.projectId === params._id
           );
   
           if (pending?.status === 'PENDING') setIsRequestPending(true);
-          if (pending?.status === 'APPROVED') setIsEditingApproved(true);
+          if (pending?.status === 'APPROVED') setIsEditingApproved(true); 
           
           setEditorState(EditorState.createWithContent(contentState));
         }
@@ -78,6 +101,31 @@ const Page: React.FC = () => {
         setLoading(false);
         console.error("Error fetching project:", error);
         toast.error("Failed to fetch project. Please try again.");
+      }
+    };
+
+    const handleSubmitWork = async () => {
+      setSubmitting(true);
+      try {
+        const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+        const response = await fetch("/api/project/update-docs", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: id, projectId: params._id, content }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          toast.error(data.error || "Failed to submit work");
+          setSubmitting(false);
+          return;
+        }
+        toast.success("Work submitted successfully");
+        setSubmitting(false);
+      } catch (error) {
+        console.error("Failed to submit work:", error);
+        toast.error("An error occurred. Please try again.");
+        setSubmitting(false);
       }
     };
   
@@ -130,10 +178,14 @@ const Page: React.FC = () => {
                 <div dangerouslySetInnerHTML={{ __html: renderedContent }} />
               )}
             </div>
-            {role === "LECTURER" && isEditingApproved && (
+            { (role === "LECTURER" && isEditingApproved || isOwner) && (
               <div className="flex border-b-2 p-3 justify-between flex-wrap">
-                <button className="bg-gray-800 outline-none rounded-lg p-1 text-white">
-                  Submit your work
+                <button 
+                  onClick={handleSubmitWork} 
+                  disabled={submitting} 
+                  className="bg-gray-800 outline-none rounded-lg p-1 text-white"
+                >
+                  {submitting ? "Submitting..." : "Remix and Submit"}
                 </button>
               </div>
             )}
@@ -150,8 +202,9 @@ const Page: React.FC = () => {
                   <p>{contributor.user.name}</p>
                   {isOwner && contributor.status === "PENDING" && (
                     <button
+                      disabled={approving}
                       className="bg-gray-800 outline-none rounded-lg p-1 text-white"
-                      onClick={() => handleRequestEdit("APPROVED")}
+                      onClick={() => approveRequest("APPROVED", contributor.userId )}
                     >
                       Approve request
                     </button>
