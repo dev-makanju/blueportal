@@ -13,6 +13,10 @@ export const GET = async (req: Request) => {
             where: {
                 userId: userId,
             },
+            include: {
+                ratings: true,
+                comments: true,
+            }
         });
 
         return NextResponse.json(newProject);
@@ -20,8 +24,8 @@ export const GET = async (req: Request) => {
     } catch (e) {
         console.error("Error fetching lesson plans:", e);
         return NextResponse.json(
-        { error: "Internal server error" },
-        { status: 500 }
+            { error: "Internal server error" },
+            { status: 500 }
         );
     }         
 };

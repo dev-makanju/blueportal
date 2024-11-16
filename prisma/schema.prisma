@@ -32,6 +32,7 @@ model User {
   activities     Activity[]           @relation("UserActivities")
   contributions  ProjectContributor[] @relation("UserContributions")
   ratings        ProjectRating[]      @relation("UserRatings")
+  comments       ProjectComment[]     @relation("UserComments")
 }
 
 model Assignment {
@@ -54,10 +55,11 @@ model Project {
   dueDate       String
   userId        String               @db.ObjectId
   user          User                 @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
-  content       String?        
-  ratings       ProjectRating[]
+  content       String?          
+  ratings       ProjectRating[]   
   contributors  ProjectContributor[] @relation("ProjectContributions")
   tags          ProjectTag[]         @relation("ProjectTags")
+  comments      ProjectComment[]     @relation("ProjectComments")
 }
 
 model ProjectRating {
@@ -114,3 +116,14 @@ model Activity {
   userId        String   @db.ObjectId
   user          User     @relation("UserActivities", fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model ProjectComment {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  projectId     String    @db.ObjectId
+  userId        String    @db.ObjectId
+  user          User      @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
+  project       Project   @relation("ProjectComments", fields: [projectId], references: [id], onDelete: Cascade)
+  content       String   
+  createdAt     DateTime  @default(now())
+}
+

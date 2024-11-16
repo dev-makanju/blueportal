@@ -10,6 +10,8 @@ import { Editor } from 'react-draft-wysiwyg';
 import { useUserStore } from '@/store/useUserStore';
 import { toast } from 'react-toastify';
 import { SingleProjectProps, Contributor } from '@/types/main';
+import Comment from '@/components/comment/Comment';
+import Review from '@/components/review/Review';
 
 type PageParams = {
   _id: string;
@@ -140,7 +142,7 @@ const Page: React.FC = () => {
   
     return (
       <div className="lg:flex lg:justify-center lg:gap-6 mt-5">
-        {loading ? (
+        { loading ? (
           <div className="border-2 lg:w-3/5 min-h-[400px]">
             <p className="text-center mb-6">Loading...</p>
           </div>
@@ -191,29 +193,37 @@ const Page: React.FC = () => {
             )}
           </div>
         )}
-  
-        <div className="lg:w-1/4 border-2 p-4 mt-5 lg:mt-0 bg-gray-50">
-          <h3 className="text-lg font-bold mb-4">Project Details</h3>
-          <div className="mb-3">
-            <p className="font-semibold">Contributors:</p>
-            {project?.contributors?.length ? (
-              project.contributors.map((contributor: Contributor, index) => (
-                <div key={index} className="flex gap-4">
-                  <p>{contributor.user.name}</p>
-                  {isOwner && contributor.status === "PENDING" && (
-                    <button
-                      disabled={approving}
-                      className="bg-gray-800 outline-none rounded-lg p-1 text-white"
-                      onClick={() => approveRequest("APPROVED", contributor.userId )}
-                    >
-                      Approve request
-                    </button>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p>No contributors</p>
-            )}
+        
+        <div className='lg:w-1/4 flex flex-col gap-4'>
+          <Comment/>
+          { !loading ? ( 
+            <Review 
+              userId={id} 
+              projectId={project?.id as string}
+            />
+          ): null}
+          <div className="border-2 p-4 mt-5 lg:mt-0 bg-gray-50">
+            <div className="mb-3">
+              <p className="font-semibold">Contributors</p>
+              {project?.contributors?.length ? (
+                project.contributors.map((contributor: Contributor, index) => (
+                  <div key={index} className="flex gap-4">
+                    <p>{contributor.user.name}</p>
+                    {isOwner && contributor.status === "PENDING" && (
+                      <button
+                        disabled={approving}
+                        className="bg-gray-800 outline-none rounded-lg p-1 text-white"
+                        onClick={() => approveRequest("APPROVED", contributor.userId )}
+                      >
+                        Approve request
+                      </button>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>No contributors</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

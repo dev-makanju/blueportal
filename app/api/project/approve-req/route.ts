@@ -13,7 +13,6 @@ export const POST = async (req: Request) => {
       where: {
         userId,
         projectId,
-        
       },
     });
 

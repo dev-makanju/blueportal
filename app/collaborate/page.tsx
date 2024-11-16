@@ -12,8 +12,8 @@ const page = () => {
                 <Image className="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" width={20} height={20} alt="Jeseimage"/>
                 <div className="flex flex-col w-full max-w-[320px] leading-1.5">
                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
-                        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
+                      <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
                     </div>
                     <p className="text-sm font-normal py-2 text-gray-900 dark:text-white">{`Thats awesome. I think our users will really appreciate the improvements.`}</p>
                     <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>

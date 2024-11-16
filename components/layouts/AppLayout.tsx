@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Link from 'next/link';
 import Search from "../modals/search";
-import Image from "next/image";
 import { useUserStore } from "@/store/useUserStore";
 
 interface AppLayoutProps {
@@ -23,6 +22,11 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const logOut = () => {             
     endUserSession();
     window.location.href = "/sign-in";
+  }
+
+  const stripProfileNames = (val: string) => {
+    const profile =  val.substring(0,2);
+    return profile.toUpperCase();
   }
 
   return (
@@ -163,13 +167,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   </div>
                   )}
                 </div>
-                <Image   
-                  className="w-10 h-10 rounded-full border-2"
-                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                  alt="avatar"
-                  width={20}
-                  height={20}
-                />
+                <div className="p-3 font-bold bg-[#FFF] rounded-full border-2">{stripProfileNames(name)}</div>
                 <small className="font-bold hidden md:block">{name || ''}</small>
                 <div onClick={logOut} className="font-bold cursor-pointer text-red-500">Log out</div>
               </div>
