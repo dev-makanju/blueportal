@@ -4,27 +4,30 @@ import { NextResponse } from 'next/server';
 export const GET = async (req: Request) => {
   try {
     const { searchParams } = new URL(req.url);
-    const projectId = searchParams.get("projectId");
+    const userId = searchParams.get('userId');
 
-    if (!projectId) {
+    if (!userId) {
       return NextResponse.json(
-        { error: "Project ID is missing" },
+        { error: "User ID is required" },
         { status: 400 }
       );
     }
 
     const comments = await prisma.projectComment.findMany({
       where: {
-        projectId,
+        userId,
       },
       include: {
-        user: true, 
+        project: true, 
+      },
+      orderBy: {
+        createdAt: 'desc', 
       },
     });
 
     return NextResponse.json(comments, { status: 200 });
   } catch (error) {
-    console.error("Error fetching project comments:", error);
+    console.error("Error fetching user comments:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

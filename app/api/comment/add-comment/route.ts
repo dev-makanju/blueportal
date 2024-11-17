@@ -32,6 +32,9 @@ export const POST = async (req: Request) => {
         projectId,
         userId,
       },
+      include: {
+        user: true, 
+      },
     });
 
     return NextResponse.json(comment, { status: 201 });

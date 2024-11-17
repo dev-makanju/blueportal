@@ -195,12 +195,17 @@ const Page: React.FC = () => {
         )}
         
         <div className='lg:w-1/4 flex flex-col gap-4'>
-          <Comment/>
           { !loading ? ( 
-            <Review 
-              userId={id} 
-              projectId={project?.id as string}
-            />
+            <>
+              <Comment 
+                userId={id} 
+                projectId={project?.id as string}
+              />  
+              <Review 
+                userId={id} 
+                projectId={project?.id as string}
+              />
+            </>
           ): null}
           <div className="border-2 p-4 mt-5 lg:mt-0 bg-gray-50">
             <div className="mb-3">

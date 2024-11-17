@@ -5,13 +5,23 @@ import CreateForm from "../modals/CreateForm";
 import AssignmentModal from "../modals/AssignmentModal";
 import ProjectModal from "../modals/ProjectModal";
 import { toast } from "react-toastify";
-import { LessonPlanProps, AssignmentTypes, ProjectTypes } from "@/types/main";
+import { LessonPlanProps, AssignmentTypes, ProjectTypes, UserTypes } from "@/types/main";
 import { useUserStore } from "@/store/useUserStore";
 import Resources from "@/components/cards/resources";
 
 interface TabOptionProps {
   id: number;
   name: string;
+}
+
+interface Activities {
+  id: string;
+  projectId: string; 
+  userId: string;  
+  user: UserTypes[];
+  project: ProjectTypes;
+  content: string;   
+  createdAt: Date;
 }
 
 interface TabOption {
@@ -27,6 +37,7 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
   const [lessonPlans, setLessonPlans] = useState<LessonPlanProps[]>([]);
   const [projects, setProjects] = useState<ProjectTypes[]>([]);
   const [assignments, setAssignments] = useState<AssignmentTypes[]>([]);
+  const [activities , setActivities] = useState<Activities[]>([]);
   const { id } = useUserStore((state) => state);
 
   const handleShowFormModal = () => {
@@ -102,6 +113,25 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
     }
   };
 
+  const fetchMyActivites = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/activies?userId=${id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) throw new Error("Failed to fetch lesson plans");
+      const data = await response.json();
+      setActivities(data);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     if (!id) return;
     if (currentView === "Lesson Plans") {
@@ -110,6 +140,8 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
       fetchMyProjects();
     } else if (currentView === "Assignments") {
       fetchAssignments();
+    }else if(currentView === "Activities"){
+      fetchMyActivites();
     }
   }, [currentView, id]);
 
@@ -224,7 +256,24 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
               </button>
             </div>
             <div className="w-full">
-              <Activies />
+              { isLoading ? (
+                <div className="flex mt-4 text-center flex-col items-center">
+                  <p>Fetching Activities...</p>
+                </div>
+              ):(
+                <div>
+                  {
+                    activities.map(activity => (
+                      <Activies 
+                        key={activity.id}
+                        content={activity?.content}
+                        projectId={activity?.projectId}
+                        project={activity?.project}
+                      />
+                    ))
+                  }
+                </div>
+              )}
             </div>
           </div>
         )}
