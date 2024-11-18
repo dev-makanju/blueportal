@@ -6,38 +6,38 @@ const ChartOverview = () => {
     const data = [
         {
           "year": "2016",
-          "Iphone": 4000,
-          "Samsung": 2400
+          "Collaboration": 4000,
+          "Activities": 2400
         },
         {
           "year": "2017",
-          "Iphone": 3000,
-          "Samsung": 1398
+          "Collaboration": 3000,
+          "Activities": 1398
         },
         {
           "year": "2018",
-          "Iphone": 2000,
-          "Samsung": 9800
+          "Collaboration": 2000,
+          "Activities": 9800
         },
         {
           "year": "2019",
-          "Iphone": 2780,
-          "Samsung": 3908
+          "Collaboration": 2780,
+          "Activities": 3908
         },
         {
           "year": "2020",
-          "Iphone": 1890,
-          "Samsung": 4800
+          "Collaboration": 1890,
+          "Activities": 4800
         },
         {
           "year": "2021",
-          "Iphone": 2390,
-          "Samsung": 3800
+          "Collaboration": 2390,
+          "Activities": 3800
         },
         {
           "year": "2022",
-          "Iphone": 3490,
-          "Samsung": 4300
+          "Collaboration": 3490,
+          "Activities": 4300
         }
     ]
     

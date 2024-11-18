@@ -1,61 +1,94 @@
-import React from 'react'
-import Image from 'next/image'
+'use client'
+import React, { useState, useEffect } from 'react';
+import Comment from '@/components/comment/Comment';
+import { useUserStore } from '@/store/useUserStore';
+import { toast } from 'react-toastify';
+import { UserTypes, ProjectTypes } from '@/types/main';
 
-const page = () => {
+interface Activities {
+  id: string;
+  projectId: string; 
+  userId: string;  
+  user: UserTypes[];
+  project: ProjectTypes;
+  content: string;   
+  createdAt: Date;
+}
+
+const Page = () => {
+  const { id } = useUserStore(state => state)
+  const [selectdViewId, setSelectdViewId] = useState<string>('');
+  const [collaborateData, setCollaborateData] = useState<Activities[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [projectIdData , setProjectIdData] = useState<string>('')
+  const fetchUserCollabo = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/activies/all`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) throw new Error("Failed to fetch lesson plans");
+      const data = await response.json();
+      setCollaborateData(data);
+      if(data.length > 0){
+        const firstItem = data.find(() =>  true);
+        setSelectdViewId(firstItem?.id);
+        setProjectIdData(firstItem?.projectId)
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const setSelected = (id:string, projectId: string) => {
+    setSelectdViewId(id)
+    setProjectIdData(projectId);
+  }
+
+  useEffect(() => {
+    fetchUserCollabo()
+  },[])
+
   return (
-    <div className="min-h-screen flex flex-col text-white">
+    <div className="flex flex-col text-white">
       <main className="flex-grow  flex flex-col md:flex-row">
-        <section className="md:w-1/2 bg-gray-700 relative rounded-lg shadow-md p-4 mb-4 md:mb-0 md:mr-4">
-          <h2 className="text-xl font-semibold mb-2">Chat</h2>
-          <div className="flex-1 overflow-y-auto h-full">     
-            <div className="flex items-start gap-2.5">
-                <Image className="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" width={20} height={20} alt="Jeseimage"/>
-                <div className="flex flex-col w-full max-w-[320px] leading-1.5">
-                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                      <span className="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
-                      <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
-                    </div>
-                    <p className="text-sm font-normal py-2 text-gray-900 dark:text-white">{`Thats awesome. I think our users will really appreciate the improvements.`}</p>
-                    <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
-                </div>
-            </div>
-          </div>
-          <div className='absolute left-0 right-0 bottom-0'>
-              <input
-                type="text"
-                placeholder="Type a message..."
-                className="mt-2 p-2 w-full rounded bg-gray-600 focus:outline-none focus:ring focus:ring-gray-400"
-              />
-          </div>
+        <section className="md:w-1/2 relative rounded-lg p-4 mb-4 md:mb-0 md:mr-4">
+          <Comment projectId={projectIdData} userId={id}/>
         </section>
 
-        <section className="md:w-1/2 bg-white rounded-lg shadow-md p-4 text-gray-800">
-          <h2 className="text-xl font-semibold mb-4">Activities</h2>
-          <div className="space-y-4">
-            <div className="border-b pb-2">
-              <h3 className="font-bold text-lg">Team Meeting</h3>
-              <p className="text-gray-600">
-                Discuss project updates and team assignments. Make sure everyone is on the same page regarding deadlines and deliverables.
-              </p>
-            </div>
-            <div className="border-b pb-2">
-              <h3 className="font-bold text-lg">Project Update</h3>
-              <p className="text-gray-600">
-                Share the latest developments on the project. Highlight any challenges faced and brainstorm solutions as a group.
-              </p>
-            </div>
-            <div className="border-b pb-2">
-              <h3 className="font-bold text-lg">Code Review</h3>
-              <p className="text-gray-600">
-                Review each others code to ensure quality and best practices. Provide constructive feedback and suggestions for improvement.
-              </p>
-            </div>
-            <div className="border-b pb-2">
-              <h3 className="font-bold text-lg">Design Sprint</h3>
-              <p className="text-gray-600">
-                Collaborate on design concepts and prototypes. Focus on user experience and interface design to enhance the final product.
-              </p>
-            </div>
+        <section className="md:w-1/2 bg-white rounded-lg shadow-md text-gray-800">
+          <h2 className="text-xl font-semibold mb-4 pt-5 pl-5 pb-5">Collaborations</h2>
+          <div className='mb-5'>
+            { isLoading ? (
+              <div className='text-center'>
+                Fetching collaboratory history
+              </div>
+            ):(
+              <div>
+                { collaborateData?.length !== 0 ?  (
+                  <div>
+                    { collaborateData.map(collabo => (
+                        <div key={collabo.id} onClick={() => setSelected(collabo.id, collabo.projectId)} className={`cursor-pointer border-b pb-2 p-5 ${selectdViewId === collabo.id ? 'bg-gray-300' : ''}`}>
+                            <h3 className="font-bold text-lg">{collabo.project.title}</h3>
+                            <p className="text-gray-600">
+                              {collabo.project.description}
+                            </p>
+                            <small className='text-blue-900 font-bold'>click to see main content</small>
+                        </div>
+                    ))}
+                  </div>
+                ): (
+                <div>
+                  <h2 className="text-center">No collaboratory history</h2>
+                </div>
+                )} 
+              </div>
+            )}
           </div>
         </section>
       </main>
@@ -63,4 +96,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
