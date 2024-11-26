@@ -80,12 +80,13 @@ const ProjectModal: React.FC<FormProps> = ({ isOpen, onClose }) => {
         .test(
           "fileType",
           "Only PDF or DOCX files are allowed",
-          (value) =>
+          (value) => {
             return (
               value instanceof File &&
               ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(value.type)
             );
-        ),
+          }
+        )
     }),
     onSubmit: async (values) => {
       setLoading(true);
