@@ -66,7 +66,7 @@ const Page = () => {
   }, []);
 
   return (
-    <>
+    <div>
       {/* Search */}
       <div className="flex-col gap-2 sm:flex-row mt-2 mb-2 flex justify-between">
         <div>
@@ -172,7 +172,7 @@ const Page = () => {
           <p className="mt-6 text-center">No resources available</p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
