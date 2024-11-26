@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { jsPDF } from "jspdf";
 import { stringToSlug, truncateText} from '@/utils/utililty';
 import Link from 'next/link';
@@ -9,20 +9,47 @@ interface resourceProps {
     id: string,
     title: string,
     desc: string,
-    rating: number,
+    rating?: number,
+    raters: number,
+    contributors: number,
     content: string,
-    tags: string[]
+    tags: string,
+    gradeLevel: string,
 }
 
 const Resources = ({
    id,
    title,
    desc,
-   rating,
    tags,
-   content 
+   raters,
+   contributors,
+   content,
+   gradeLevel
 }: resourceProps) => { 
-    const { role } = useUserStore(state => state)
+    const {id: userId, role } = useUserStore(state => state)
+    const [downloads , setDownloads] = useState<number>(0);
+    const updateDownloadCount = async () => {
+        try{
+            const response = await fetch('/api/download/click', {
+              method: 'POST',
+              headers: {
+                'Content-Type':'application/json',
+              },
+              body: JSON.stringify({
+                projectId: id,
+                userId: userId
+              })
+            })
+
+            if(response) {
+                setDownloads( Number(downloads) + 1);
+            }
+        }catch(err){
+            console.error(err);
+        }
+    }
+
     const downLoadResourseAsPDF = (title: string, document: string) => {
         const doc = new jsPDF({
             orientation: "portrait",
@@ -51,20 +78,42 @@ const Resources = ({
         });
     
         doc.save(`${stringToSlug(title)}.pdf`);
+        updateDownloadCount()
     };
+
+    const fetchDownloads = async () => {
+       try {
+            const response = await fetch(`/api/download?projectId=${id}`);
+            const data = await response.json();
+            if(response) {
+                setDownloads(data.length);
+            }
+
+       }catch(err){
+          console.error(err);
+       }
+    }
+
+    useEffect(() => {
+        fetchDownloads();
+    }, [])
     
     return (
-     <div key={id} className="max-w-sm bg-white border h-[350px] border-gray-200 rounded-lg shadow relative">
+
+     <div key={id} className="sm:max-w-[350px] bg-white border h-[350px] border-gray-200 rounded-lg shadow relative">
         <h1 className='p-3 text-3xl font-bold'>{title}</h1>
-        <div className='absolute bottom-0 right-0 left-0'>   
-            <div className="p-3 h-[200px] relative">
+        <div className='absolute bottom-0 right-0 left-0 border-2'>   
+            <div className="p-3 h-[250px] relative">
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{truncateText(desc, 70)}</p>
-                <div className='flex mt-3 gap-1'>
-                <span>{rating}/5</span>
-                <span className="text-gold">★</span> 
+                
+                <div className='mt-2'>
+                    <p className='text-sm'>{raters} ratings , {contributors} contributors , {downloads} downloads</p> 
+                </div>
+                <div className='mt-2'>
+                    <p className='text-sm'>grade {gradeLevel}</p> 
                 </div>
                 <div className='flex mt-3 gap-2'>
-                    { tags?.map((tag, _) => (
+                    { tags.split(',').map((tag, _) => (
                         <span key={_} className='bg-gray-800 p-1 rounded-lg text-white'>{tag}</span>
                     ))}         
                 </div>

@@ -11,9 +11,14 @@ export const POST = async (req: Request) => {
       dueDate,
       title,
       userId,
+      fileUrl,
+      tags,
+      gradeLevel,
+      objective,
+      curriculum
     }: ProjectTypes = await req.json();
 
-    if (!title || !content || !description || !dueDate || !userId) {
+    if (!title || !content || !description || !dueDate || !userId || !gradeLevel || !objective || !curriculum) {
       return NextResponse.json(
         { error: "Please provide all required fields" },
         { status: 400 }
@@ -27,6 +32,11 @@ export const POST = async (req: Request) => {
         dueDate,
         title,
         userId,
+        tags,
+        gradeLevel,
+        objective,
+        curriculum,
+        fileUrl,
       },
     });
     return NextResponse.json(newProject, { status: 201 });

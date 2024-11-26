@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -158,17 +157,8 @@ const Page: React.FC = () => {
                   {isRequestPending ? "Pending edit request" : "Ask to edit"}
                 </button>
               )}
-              <div className="flex items-center gap-2">
-                <Image
-                  className="rounded-full border-2"
-                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
-                  alt="avatar"
-                  width={20}
-                  height={20}
-                />
-              </div>
             </div>
-            <div className="p-2 mt-3">
+            <div className="p-2 mt-3 min-h-[450px]">
               {(role === "LECTURER" && (isEditingApproved || isOwner)) ? (
                 <Editor
                   editorState={editorState}
@@ -197,6 +187,19 @@ const Page: React.FC = () => {
         <div className='lg:w-1/4 flex flex-col gap-4'>
           { !loading ? ( 
             <>
+              <div className="flex items-center gap-2 mt-4">
+                {project?.fileUrl ? (
+                  <a 
+                    href={project.fileUrl} 
+                    download="uploaded-resource.pdf"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Download additional resources
+                  </a>
+                ) : (
+                  <span className="text-gray-500">No additional resources available</span>
+                )}
+              </div>
               <Comment 
                 userId={id} 
                 projectId={project?.id as string}

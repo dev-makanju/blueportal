@@ -16,7 +16,6 @@ export const GET = async (req: Request) => {
             },
             include: {
                 user: true,
-                tags: true,         
                 contributors: {
                     include: {
                         user: true, 

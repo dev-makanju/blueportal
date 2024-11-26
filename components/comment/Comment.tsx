@@ -108,7 +108,7 @@ const Comment = ({projectId , userId }: userProps) => {
                   ))}
                 </div>
               ):(
-                <div className="flex-1 gap-3 overflow-y-auto h-[300px] max-h-[350px]">
+                <div className="flex-1 gap-3 overflow-y-auto h-[300px] max-h-[350px] text-center">
                   <p>No discussion history, start a conversation</p>
                 </div>
               )}

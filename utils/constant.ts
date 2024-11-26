@@ -13,7 +13,6 @@ export function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
-
 export const TABS_OPTION = [
   {
     id:1,
@@ -32,7 +31,6 @@ export const TABS_OPTION = [
     name: 'Project'
   }
 ]
-
 
 export const STUDENT_TABS_OPTION = [
   {

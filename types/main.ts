@@ -88,9 +88,10 @@ export interface SingleProjectProps {
     userId: string;
     content: string;
     user: UserTypes;
-    tags: [];
+    tags: string;
     contributors: [];
     ratings: [];
+    fileUrl: string;
 }
 
 export interface ProjectTypes {
@@ -99,9 +100,15 @@ export interface ProjectTypes {
   description: string;
   dueDate: string;
   rating?: number;
-  tags?: string[];
+  tags: string;
+  contributors: [];
+  ratings: [];
   title: string;
   userId: string;
+  fileUrl: string;
+  gradeLevel: string;
+  objective?: string;
+  curriculum?: string;
 }
 
 export interface AssignmentTypes {

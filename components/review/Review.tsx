@@ -45,7 +45,7 @@ const Review = ({ userId, projectId }: RatingProps) => {
       const data = await response.json();
 
       if (response.ok) {
-        const newrating = data[0].rating
+        const newrating = data[0]?.rating
         setRating(newrating as number);
       } else {
         toast.error(data?.error || "Could not fetch your rating");
@@ -62,7 +62,7 @@ const Review = ({ userId, projectId }: RatingProps) => {
     fetchUserRating();
   }, [projectId, userId]);
 
-  return (
+    return (
     <div className="p-1">
       <small className="p-1">Add rating</small>
       <ul className="flex gap-1 p-1">
@@ -70,7 +70,7 @@ const Review = ({ userId, projectId }: RatingProps) => {
           <li
             key={value}
             onClick={() => handleRating(value)}
-            className={`border-2 p-1 rounded cursor-pointer ${
+            className={`border-2 p-1 rounded cursor-pointer ${ 
               rating === value ? "bg-yellow-500 text-[#000]" : ""
             }`}
           >

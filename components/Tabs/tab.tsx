@@ -363,7 +363,7 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
                 <p>Fetching project...</p>
               </div>
             ) : projects.length > 0 ? (
-              <div className="auto-fit-card gap-5  mb-[6rem]">
+              <div className="auto-fit-card gap-5 mb-[6rem]">
                 {projects.map((project) => (
                   <Resources
                     id={project?.id as string}
@@ -371,8 +371,10 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
                     content={project.content}
                     desc={project?.description}
                     title={project?.title}
-                    rating={project?.rating ? Number(project?.rating) : 0 }
-                    tags={project.tags || []}
+                    tags={project?.tags}        
+                    contributors={project.contributors ? project.contributors.length : 0}
+                    raters={project.ratings ? project.ratings.length : 0}
+                    gradeLevel={project?.gradeLevel}
                   />
                 ))}
               </div>

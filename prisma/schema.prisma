@@ -49,18 +49,23 @@ model Assignment {
 }
 
 model Project {
-  id            String               @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  description   String?
-  dueDate       String
-  userId        String               @db.ObjectId
-  user          User                 @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
-  content       String?          
-  ratings       ProjectRating[]   
-  contributors  ProjectContributor[] @relation("ProjectContributions")
-  tags          ProjectTag[]         @relation("ProjectTags")
-  comments      ProjectComment[]     @relation("ProjectComments")
+  id             String               @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String?
+  dueDate        String
+  userId         String               @db.ObjectId
+  user           User                 @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
+  content        String?
+  ratings        ProjectRating[]
+  contributors   ProjectContributor[] @relation("ProjectContributions")
+  tags           String
+  comments       ProjectComment[]     @relation("ProjectComments")
+  fileUrl        String?
+  gradeLevel     String
+  objective      String?
+  curriculum     String? 
 }
+
 
 model ProjectRating {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -69,12 +74,6 @@ model ProjectRating {
   user          User      @relation("UserRatings", fields: [userId], references: [id], onDelete: Cascade)
   project       Project   @relation(fields: [projectId], references: [id], onDelete: Cascade) 
   rating        Int
-}
-
-model Tag {
-  id        String       @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  projects  ProjectTag[]
 }
 
 model LessonPlan {
@@ -101,14 +100,6 @@ model ProjectContributor {
   createdAt DateTime @default(now())
 }
 
-model ProjectTag {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  projectId String   @db.ObjectId
-  tagId     String   @db.ObjectId 
-  project   Project  @relation("ProjectTags", fields: [projectId], references: [id], onDelete: Cascade)
-  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
-}
-
 model Activity {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   description   String
@@ -127,3 +118,9 @@ model ProjectComment {
   createdAt     DateTime  @default(now())
 }
 
+model ProjectDownLoad {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  projectId     String    @db.ObjectId
+  userId        String    @db.ObjectId
+  createdAt     DateTime  @default(now())
+}
