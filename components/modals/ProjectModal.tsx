@@ -81,16 +81,15 @@ const ProjectModal: React.FC<FormProps> = ({ isOpen, onClose }) => {
           "fileType",
           "Only PDF or DOCX files are allowed",
           (value) =>
-            value &&
-            ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(
-              value.type
-            )
+            return (
+              value instanceof File &&
+              ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(value.type)
+            );
         ),
     }),
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        // Upload the document to Cloudinary
         const fileUrl = await uploadFileToCloudinary(values.document!);
         if (!fileUrl) return;
 
