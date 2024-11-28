@@ -29,4 +29,13 @@ body {
     display: grid;
     grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+    
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }

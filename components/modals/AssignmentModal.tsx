@@ -54,6 +54,7 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
           } else {
             toast.success('Assignment submitted successfully!');
             handleTrigger(); 
+            window.location.reload();
           }
         } catch (err) {
           console.error("Login error:", err);
@@ -70,7 +71,7 @@ const AssignmentModal: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
                 id="popup-modal"
                 className="bg-[#00000054] overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0"
                 >
-                <div className="relative p-4 w-full max-w-md max-h-full">
+                <div className="relative p-4 w-full max-w-md max-h-full h-[500px] overflow-auto no-scrollbar">
                     <div className="relative rounded-lg shadow bg-gray-100">
                     <button
                         type="button"

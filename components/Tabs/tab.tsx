@@ -120,9 +120,12 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      if (!response.ok) throw new Error("Failed to fetch lesson plans");
-      const data = await response.json();
-      setActivities(data);
+      if (!response.ok){
+        throw new Error("Failed to fetch activities");
+      }else{  
+        const data = await response.json();
+        setActivities(data);
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "An unknown error occurred"

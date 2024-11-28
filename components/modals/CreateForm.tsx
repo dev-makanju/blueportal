@@ -59,6 +59,7 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
             toast.error(error || 'Failed to submit the lesson plan.');
           } else {
             toast.success('Lesson plan submitted successfully!');
+            window.location.reload();
             handleTrigger(); 
           }
         } catch (err) {
@@ -76,7 +77,7 @@ const CreatForm: React.FC<FormProps> = ({ showModal, handleTrigger }) => {
             id="popup-modal"
             className="bg-[#00000054] overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0"
             >
-            <div className="relative p-4 w-full max-w-md max-h-full">
+            <div className="relative p-4 w-full max-w-md max-h-full h-[500px] overflow-auto no-scrollbar">
                 <div className="relative rounded-lg shadow bg-gray-100">
                 <button
                     type="button"

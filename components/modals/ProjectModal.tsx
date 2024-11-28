@@ -113,6 +113,7 @@ const ProjectModal: React.FC<FormProps> = ({ isOpen, onClose }) => {
           toast.error(error || "Failed to create project.");
         } else {
           toast.success("Project created successfully!");
+          window.location.reload();
           onClose();
         }
       } catch (error) {
@@ -128,7 +129,7 @@ const ProjectModal: React.FC<FormProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center overflow-auto justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-8 rounded-lg w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg w-full max-w-md h-[500px] overflow-auto no-scrollbar">
         <h2 className="text-2xl font-semibold mb-6 mt-5">Create New Project</h2>
         <form onSubmit={formik.handleSubmit} className="space-y-4">
           <div>
