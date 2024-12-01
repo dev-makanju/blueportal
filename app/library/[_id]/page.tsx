@@ -203,6 +203,7 @@ const Page: React.FC = () => {
               <Comment 
                 userId={id} 
                 projectId={project?.id as string}
+                showInputField={isEditingApproved || isOwner}
               />  
               <Review 
                 userId={id} 

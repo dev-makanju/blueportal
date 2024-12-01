@@ -13,9 +13,10 @@ interface Comment {
 interface userProps {
   projectId?: string;
   userId?: string;
+  showInputField?: boolean;
 }
 
-const Comment = ({projectId , userId }: userProps) => {
+const Comment = ({projectId , userId, showInputField }: userProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -118,19 +119,22 @@ const Comment = ({projectId , userId }: userProps) => {
             <p className="text-center text-black">Fetching Discussions...</p>
           </div>
         )}
-        <div className="border-2 rounded-lg text-sm flex gap-1">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="p-2 w-full rounded focus:outline-none text-black"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            onKeyDown={addComment}
-          />
-          { sending && (
-            <div className="border-2 text-white text-center w-[70px] h-[32px] bg-black">Sending...</div>
-          )}
-        </div>
+        { showInputField && showInputField ? (
+          <div className="border-2 rounded-lg text-sm flex gap-1">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              className="p-2 w-full rounded focus:outline-none text-black"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyDown={addComment}
+            />
+            { sending && (
+              <div className="border-2 text-white text-center w-[70px] h-[32px] bg-black">Sending...</div>
+            )}
+          </div>
+        ): null}
+        
       </section>
     </div>
   );

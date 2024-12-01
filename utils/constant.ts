@@ -15,20 +15,8 @@ export function urlBase64ToUint8Array(base64String: string) {
 
 export const TABS_OPTION = [
   {
-    id:1,
-    name: 'Lesson Plans'
-  },
-  {
-    id:2,
-    name: 'Activities'
-  },
-  {
-    id:3,
-    name: 'Assignments'
-  },
-  {
     id:4,
-    name: 'Project'
+    name: 'My Project'
   }
 ]
 
@@ -36,10 +24,6 @@ export const STUDENT_TABS_OPTION = [
   {
     id:1,
     name: 'Lesson Plans'
-  },
-  {
-    id:2,
-    name: 'Activities'
   },
   {
     id:3,

@@ -142,4 +142,5 @@ export interface UserTypes {
   role: string;
   fetchingUser?: boolean;
   signingIn?: boolean;
+  isLoggedIn?: boolean;
 }

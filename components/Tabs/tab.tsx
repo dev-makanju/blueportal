@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Activies from "../cards/activies";
 import CreateForm from "../modals/CreateForm";
 import AssignmentModal from "../modals/AssignmentModal";
 import ProjectModal from "../modals/ProjectModal";
 import { toast } from "react-toastify";
-import { LessonPlanProps, AssignmentTypes, ProjectTypes, UserTypes } from "@/types/main";
+import { AssignmentTypes, ProjectTypes } from "@/types/main";
 import { useUserStore } from "@/store/useUserStore";
 import Resources from "@/components/cards/resources";
 
@@ -14,15 +13,6 @@ interface TabOptionProps {
   name: string;
 }
 
-interface Activities {
-  id: string;
-  projectId: string; 
-  userId: string;  
-  user: UserTypes[];
-  project: ProjectTypes;
-  content: string;   
-  createdAt: Date;
-}
 
 interface TabOption {
   tabs: TabOptionProps[];
@@ -34,11 +24,9 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
   const [showAssignmentModal, setShowAssignmentModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showProjectModal, setShowProjectModal] = useState<boolean>(false);
-  const [lessonPlans, setLessonPlans] = useState<LessonPlanProps[]>([]);
   const [projects, setProjects] = useState<ProjectTypes[]>([]);
   const [assignments, setAssignments] = useState<AssignmentTypes[]>([]);
-  const [activities , setActivities] = useState<Activities[]>([]);
-  const { id } = useUserStore((state) => state);
+  const { id , role } = useUserStore((state) => state);
 
   const handleShowFormModal = () => {
     setShowFormModal(!showFormModal);
@@ -54,25 +42,6 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
 
   const handleShowAssignmentModal = () => {
     setShowAssignmentModal(!showAssignmentModal);
-  };
-
-  const fetchLessonPlans = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/plans?userId=${id}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch lesson plans");
-      const data = await response.json();
-      setLessonPlans(data);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "An unknown error occurred"
-      );
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const fetchAssignments = async () => {
@@ -113,38 +82,12 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
     }
   };
 
-  const fetchMyActivites = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/activies?userId=${id}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok){
-        throw new Error("Failed to fetch activities");
-      }else{  
-        const data = await response.json();
-        setActivities(data);
-      }
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "An unknown error occurred"
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   useEffect(() => {
     if (!id) return;
-    if (currentView === "Lesson Plans") {
-      fetchLessonPlans();
-    } else if (currentView === "Project") {
+    if (currentView === "My Project") {
       fetchMyProjects();
     } else if (currentView === "Assignments") {
       fetchAssignments();
-    }else if(currentView === "Activities"){
-      fetchMyActivites();
     }
   }, [currentView, id]);
 
@@ -181,113 +124,16 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
         </ul>
       </div>
       <div id="default-styled-tab-content">
-        {currentView === "Lesson Plans" && (
-          <div className="flex min-h-[400px] w-full flex-col">
-            <button
-              onClick={handleShowFormModal}
-              className="bg-gray-800 p-3 text-white rounded-lg w-[200px] float-right"
-            >
-              Create a Lesson Plan
-            </button>
-            {isLoading ? (
-              <div className="flex mt-4 text-center flex-col items-center">
-                <p>Fetching lesson plans...</p>
-              </div>
-            ) : lessonPlans.length > 0 ? (
-              <div className="w-full flex flex-wrap gap-4">
-                {lessonPlans.map((plan) => (
-                  <div key={plan?.id} className="p-6 mt-5 border w-full sm:w-[48%] h-[450px] overflow-y-auto border-gray-300 rounded-lg bg-white shadow-sm">
-                    <h3 className="text-lg font-bold">{plan?.title}</h3>
-                    <div className="text-sm text-gray-500 mb-4">
-                      <p>
-                        Grade Level:{" "}
-                        <span className="font-medium text-gray-700">
-                          {plan?.gradeLevel}
-                        </span>
-                      </p>
-                      <p>Objectives:</p>
-                      <ul className="list-disc list-inside text-gray-600 mt-1">
-                        {plan?.objectives
-                          ?.split(". ")
-                          .map((objective, index) => (
-                            <li key={index}>{objective}</li>
-                          ))}
-                      </ul>
-                    </div>
-
-                    <div className="text-sm text-gray-500 mb-4">
-                      <p className="font-medium text-gray-700">Materials:</p>
-                      <p className="text-gray-600">{plan?.materials}</p>
-                    </div>
-
-                    <div className="text-sm text-gray-500 mb-4">
-                      <p className="font-medium text-gray-700">
-                        Lesson Phases:
-                      </p>
-                      <p className="text-gray-600">{plan?.lessonPhases}</p>
-                    </div>
-
-                    <div className="text-sm text-gray-500 mb-4">
-                      <p className="font-medium text-gray-700">Assessment:</p>
-                      <p className="text-gray-600">{plan?.assessment}</p>
-                    </div>
-
-                    <div className="text-sm text-gray-500 mb-4">
-                      <p className="font-medium text-gray-700">Reflection:</p>
-                      <p className="text-gray-600">{plan?.reflection}</p>
-                    </div>
-
-                    <p className="text-xs text-gray-400 mt-4">
-                      Created on: {new Date(plan?.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex mt-4 text-center flex-col items-center">
-                <p>No Lesson Plans available</p>
-              </div>
-            )}
-          </div>
-        )}
-        {currentView === "Activities" && (
-          <div className="flex justify-center items-center min-h-[400px] w-full">
-            <div className="flex hidden flex-col items-center">
-              <p>No {currentView} </p>
-              <button className="bg-gray-800 mt-[1rem] p-3 outline-none rounded-lg text-white">
-                Create an {currentView}
-              </button>
-            </div>
-            <div className="w-full">
-              { isLoading ? (
-                <div className="flex mt-4 text-center flex-col items-center">
-                  <p>Fetching Activities...</p>
-                </div>
-              ):(
-                <div>
-                  {
-                    activities.map(activity => (
-                      <Activies 
-                        key={activity.id}
-                        content={activity?.content}
-                        projectId={activity?.projectId}
-                        project={activity?.project}
-                      />
-                    ))
-                  }
-                </div>
-              )}
-            </div>
-          </div>
-        )}
         {currentView === "Assignments" && (
           <div className="flex min-h-[400px] w-full flex-col">
-            <button
-              onClick={() => setShowAssignmentModal(!showAssignmentModal)}
-              className="bg-gray-800 p-3 text-white rounded-lg w-[200px] float-right"
-            >
-              Create an {currentView}
-            </button>
+            { role === 'LECTURER' && (
+                <button
+                  onClick={() => setShowAssignmentModal(!showAssignmentModal)}
+                  className="bg-gray-800 p-3 text-white rounded-lg w-[200px] float-right"
+                >
+                  Create an {currentView}
+                </button>
+            )}
             {isLoading ? (
               <div className="flex mt-4 text-center flex-col items-center">
                 <p>Fetching assignment...</p>
@@ -353,7 +199,7 @@ const Tab: React.FC<TabOption> = ({ tabs }) => {
             )}
           </div>
         )}
-        {currentView === "Project" && (
+        {currentView === "My Project" && (
           <div className="w-full flex flex-col">
             <button
               onClick={handleShowProjectModal}

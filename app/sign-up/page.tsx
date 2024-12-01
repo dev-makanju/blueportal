@@ -17,7 +17,7 @@ const Page = () => {
     name: "",
     email: "",
     pass: "",
-    role: "STUDENT",
+    role: "LECTURER",
   });
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -116,7 +116,6 @@ const Page = () => {
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
             >
               <option value="">Select role</option>
-              <option value="STUDENT">Student</option>
               <option value="LECTURER">Lecturer</option>
             </select>
           </div>

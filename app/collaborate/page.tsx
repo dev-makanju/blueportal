@@ -58,7 +58,7 @@ const Page = () => {
     <div className="flex flex-col text-white">
       <main className="flex-grow  flex flex-col md:flex-row">
         <section className="md:w-1/2 relative rounded-lg p-4 mb-4 md:mb-0 md:mr-4">
-          <Comment projectId={projectIdData} userId={id}/>
+          <Comment projectId={projectIdData} userId={id} showInputField={true}/>
         </section>
 
         <section className="md:w-1/2 bg-white rounded-lg shadow-md text-gray-800">
