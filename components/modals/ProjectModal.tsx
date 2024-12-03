@@ -98,8 +98,10 @@ const ProjectModal: React.FC<FormProps> = ({ isOpen, onClose }) => {
           ...values,
           userId,
           fileUrl,
+          original: values.content,
         };
-
+        
+        console.log(formData)
         const response = await fetch("/api/project/create", {
           method: "POST",
           headers: {

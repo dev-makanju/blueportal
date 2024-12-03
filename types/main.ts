@@ -83,6 +83,7 @@ export interface Contributor {
 export interface SingleProjectProps {
     id: string;
     title: string;
+    original: string;
     description: string;
     dueDate: string;
     userId: string;
@@ -97,6 +98,7 @@ export interface SingleProjectProps {
 export interface ProjectTypes {
   id?: string;
   content: string;
+  original: string;
   description: string;
   dueDate: string;
   rating?: number;

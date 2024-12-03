@@ -56,6 +56,7 @@ model Project {
   userId         String               @db.ObjectId
   user           User                 @relation("UserProjects", fields: [userId], references: [id], onDelete: Cascade)
   content        String?
+  original       String?
   ratings        ProjectRating[]
   contributors   ProjectContributor[] @relation("ProjectContributions")
   tags           String
