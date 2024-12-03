@@ -18,7 +18,7 @@ const Page = () => {
   const fetchPublicProject = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/public-project');
+      const res = await fetch('/api/public-project?sortBy=dueDate&sortOrder=asc');
       if (!res.ok) throw new Error('Failed to fetch projects');
       const data = await res.json();
       setProjects(data);

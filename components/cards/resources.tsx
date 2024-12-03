@@ -41,7 +41,6 @@ const Resources = ({
                 userId: userId
               })
             })
-
             if(response) {
                 setDownloads( Number(downloads) + 1);
             }
@@ -86,9 +85,8 @@ const Resources = ({
             const response = await fetch(`/api/download?projectId=${id}`);
             const data = await response.json();
             if(response) {
-                setDownloads(data.length);
+               setDownloads(data.length);
             }
-
        }catch(err){
           console.error(err);
        }
