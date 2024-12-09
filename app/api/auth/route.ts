@@ -1,11 +1,6 @@
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 import { compareSync } from "bcryptjs";
-// import jwt from "jsonwebtoken";
-// import cookie from "cookie";
-// import dayjs from "dayjs";
-
-// const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
 export const POST = async (req: Request) => {
   try {
@@ -17,7 +12,7 @@ export const POST = async (req: Request) => {
 
     if (!user) {
       return NextResponse.json(
-        { error: "No user found with this email" },
+        { error: "Please enter a valid email address or password. Retry." },
         { status: 404 }
       );
     }
